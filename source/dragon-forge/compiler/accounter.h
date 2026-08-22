@@ -781,7 +781,7 @@ ANVIL__counted_list COMPILER__account__structures__generate_predefined_type_name
         names.count++;
 
         // append the name
-        COMPILER__append__namespace(&names.list, name, error);
+        COMPILER__append(&names.list, COMPILER__namespace, name, error);
         if (COMPILER__check__error_occured(error)) {
             return names;
         }
@@ -1029,7 +1029,7 @@ COMPILER__accountling_structures COMPILER__account__structures(COMPILER__parslin
             }
 
             // append name
-            COMPILER__append__namespace(&output.name_table.list, name.name, error);
+            COMPILER__append(&output.name_table.list, COMPILER__namespace, name.name, error);
             output.name_table.count++;
             if (COMPILER__check__error_occured(error)) {
                 return output;
@@ -1855,7 +1855,7 @@ void COMPILER__account__functions__get_scope_level_data(COMPILER__accountling_fu
             }
 
             // append offset
-            COMPILER__append__namespace(&(*accountling_function).offsets.list, parsling_statement.name.name, error);
+            COMPILER__append(&(*accountling_function).offsets.list, COMPILER__namespace, parsling_statement.name.name, error);
             if (COMPILER__check__error_occured(error)) {
                 return;
             }

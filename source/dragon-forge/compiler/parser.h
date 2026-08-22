@@ -285,104 +285,6 @@ COMPILER__parsling_program COMPILER__create_null__parsling_program() {
     return COMPILER__create__parsling_program(ANVIL__create_null__counted_list(), ANVIL__create_null__counted_list(), ANVIL__create_null__counted_list());
 }
 
-// append namespace
-void COMPILER__append__namespace(ANVIL__list* list, COMPILER__namespace data, COMPILER__error* error) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(COMPILER__namespace), &(*error).memory_error_occured);
-
-    // append data
-    (*(COMPILER__namespace*)ANVIL__calculate__list_current_address(list)) = data;
-
-    // increase fill
-    (*list).filled_index += sizeof(COMPILER__namespace);
-
-    return;
-}
-
-// append parsling argument
-void COMPILER__append__parsling_argument(ANVIL__list* list, COMPILER__parsling_argument data, COMPILER__error* error) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(COMPILER__parsling_argument), &(*error).memory_error_occured);
-
-    // append data
-    (*(COMPILER__parsling_argument*)ANVIL__calculate__list_current_address(list)) = data;
-
-    // increase fill
-    (*list).filled_index += sizeof(COMPILER__parsling_argument);
-
-    return;
-}
-
-// append parsling statement
-void COMPILER__append__parsling_statement(ANVIL__list* list, COMPILER__parsling_statement data, COMPILER__error* error) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(COMPILER__parsling_statement), &(*error).memory_error_occured);
-
-    // append data
-    (*(COMPILER__parsling_statement*)ANVIL__calculate__list_current_address(list)) = data;
-
-    // increase fill
-    (*list).filled_index += sizeof(COMPILER__parsling_statement);
-
-    return;
-}
-
-// append parsling structure
-void COMPILER__append__parsling_structure(ANVIL__list* list, COMPILER__parsling_structure data, COMPILER__error* error) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(COMPILER__parsling_structure), &(*error).memory_error_occured);
-
-    // append data
-    (*(COMPILER__parsling_structure*)ANVIL__calculate__list_current_address(list)) = data;
-
-    // increase fill
-    (*list).filled_index += sizeof(COMPILER__parsling_structure);
-
-    return;
-}
-
-// append parsling alias
-void COMPILER__append__parsling_alias(ANVIL__list* list, COMPILER__parsling_alias data, COMPILER__error* error) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(COMPILER__parsling_alias), &(*error).memory_error_occured);
-
-    // append data
-    (*(COMPILER__parsling_alias*)ANVIL__calculate__list_current_address(list)) = data;
-
-    // increase fill
-    (*list).filled_index += sizeof(COMPILER__parsling_alias);
-
-    return;
-}
-
-// append parsling function
-void COMPILER__append__parsling_function(ANVIL__list* list, COMPILER__parsling_function data, COMPILER__error* error) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(COMPILER__parsling_function), &(*error).memory_error_occured);
-
-    // append data
-    (*(COMPILER__parsling_function*)ANVIL__calculate__list_current_address(list)) = data;
-
-    // increase fill
-    (*list).filled_index += sizeof(COMPILER__parsling_function);
-
-    return;
-}
-
-// append parsling program
-void COMPILER__append__parsling_program(ANVIL__list* list, COMPILER__parsling_program data, COMPILER__error* error) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(COMPILER__parsling_program), &(*error).memory_error_occured);
-
-    // append data
-    (*(COMPILER__parsling_program*)ANVIL__calculate__list_current_address(list)) = data;
-
-    // increase fill
-    (*list).filled_index += sizeof(COMPILER__parsling_program);
-
-    return;
-}
-
 // close namespace
 void COMPILER__close__parsling_namespace(COMPILER__namespace name) {
     // close list
@@ -783,7 +685,7 @@ ANVIL__counted_list COMPILER__parse__statement_arguments(ANVIL__current* current
         }
 
         // append argument
-        COMPILER__append__parsling_argument(&output.list, argument, error);
+        COMPILER__append(&output.list, COMPILER__parsling_argument, argument, error);
     
         // increment count
         output.count++;
@@ -960,7 +862,7 @@ COMPILER__parsling_scope COMPILER__parse__scope(ANVIL__current* current, COMPILE
         }
 
         // add statement
-        COMPILER__append__parsling_statement(&output.statements.list, statement, error);
+        COMPILER__append(&output.statements.list, COMPILER__parsling_statement, statement, error);
         output.statements.count++;
         if (COMPILER__check__error_occured(error)) {
             return output;
@@ -1004,7 +906,7 @@ COMPILER__parsling_structure COMPILER__parse__structure(ANVIL__current* current,
         }
 
         // append argument
-        COMPILER__append__parsling_argument(&output.type_names.list, COMPILER__create__parsling_argument(COMPILER__pat__type, name, COMPILER__create_null__namespace(), COMPILER__create_null__namespace()), error);
+        COMPILER__append(&output.type_names.list, COMPILER__parsling_argument, COMPILER__create__parsling_argument(COMPILER__pat__type, name, COMPILER__create_null__namespace(), COMPILER__create_null__namespace()), error);
         output.type_names.count++;
         if (COMPILER__check__error_occured(error)) {
             return output;
@@ -1111,14 +1013,14 @@ COMPILER__parsling_program COMPILER__parse__program(COMPILER__lexlings lexlings,
                 temp_structure = COMPILER__parse__structure(&current_lexling, error);
 
                 // append structure
-                COMPILER__append__parsling_structure(&output.structures.list, temp_structure, error);
+                COMPILER__append(&output.structures.list, COMPILER__parsling_structure, temp_structure, error);
                 output.structures.count++;
             } else {
                 // parse function
                 temp_function = COMPILER__parse__function(&current_lexling, error);
 
                 // append function
-                COMPILER__append__parsling_function(&output.functions.list, temp_function, error);
+                COMPILER__append(&output.functions.list, COMPILER__parsling_function, temp_function, error);
                 output.functions.count++;
             }
         }
