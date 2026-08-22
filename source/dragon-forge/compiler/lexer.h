@@ -104,20 +104,6 @@ void COMPILER__close__lexlings(COMPILER__lexlings lexlings) {
     return;
 }
 
-// append a lexling to the list
-void COMPILER__append__lexling(ANVIL__list* list, COMPILER__lexling lexling, COMPILER__error* error) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(COMPILER__lexling), &(*error).memory_error_occured);
-
-    // append data
-    (*(COMPILER__lexling*)ANVIL__calculate__list_current_address(list)) = lexling;
-
-    // increase fill
-    (*list).filled_index += sizeof(COMPILER__lexling);
-
-    return;
-}
-
 // get lexling by index
 COMPILER__lexling COMPILER__get__lexling_by_index(ANVIL__counted_list lexlings, COMPILER__lexling_index index) {
     return ((COMPILER__lexling*)lexlings.list.buffer.start)[index];
@@ -232,28 +218,28 @@ void COMPILER__compile__lex_one_buffer(COMPILER__lexlings* lexlings, ANVIL__buff
         // check for lexlings
         if (COMPILER__calculate__valid_character_range(current, '(', '(')) {
             // add lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__left_parenthesis, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__left_parenthesis, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
             (*lexlings).data.count++;
 
             // next character
             current.start += sizeof(ANVIL__character);
         } else if (COMPILER__calculate__valid_character_range(current, ')', ')')) {
             // add lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__right_parenthesis, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__right_parenthesis, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
             (*lexlings).data.count++;
 
             // next character
             current.start += sizeof(ANVIL__character);
         } else if (COMPILER__calculate__valid_character_range(current, '{', '{')) {
             // add lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__left_curly_bracket, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__left_curly_bracket, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
             (*lexlings).data.count++;
 
             // next character
             current.start += sizeof(ANVIL__character);
         } else if (COMPILER__calculate__valid_character_range(current, '}', '}')) {
             // add lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__right_curly_bracket, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__right_curly_bracket, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
             (*lexlings).data.count++;
 
             // next character
@@ -271,46 +257,46 @@ void COMPILER__compile__lex_one_buffer(COMPILER__lexlings* lexlings, ANVIL__buff
             }
 
             // record lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__name, ANVIL__create__buffer(temp_start, temp_end), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, ANVIL__create__buffer(temp_start, temp_end)))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__name, ANVIL__create__buffer(temp_start, temp_end), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, ANVIL__create__buffer(temp_start, temp_end)))), error);
             (*lexlings).data.count++;
         } else if (COMPILER__calculate__valid_character_range(current, ':', ':')) {
             // add lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__colon, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__colon, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
             (*lexlings).data.count++;
 
             // next character
             current.start += sizeof(ANVIL__character);
         } else if (COMPILER__calculate__valid_character_range(current, ',', ',')) {
             // add lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__comma, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__comma, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
             (*lexlings).data.count++;
 
             // next character
             current.start += sizeof(ANVIL__character);
         } else if (COMPILER__calculate__valid_character_range(current, '@', '@')) {
             // add lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__at, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__at, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
             (*lexlings).data.count++;
 
             // next character
             current.start += sizeof(ANVIL__character);
         } else if (COMPILER__calculate__valid_character_range(current, '=', '=')) {
             // add lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__equals, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__equals, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
             (*lexlings).data.count++;
 
             // next character
             current.start += sizeof(ANVIL__character);
         } else if (COMPILER__calculate__valid_character_range(current, '!', '!')) {
             // add lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__exclamation_point, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__exclamation_point, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
             (*lexlings).data.count++;
 
             // next character
             current.start += sizeof(ANVIL__character);
         } else if (COMPILER__calculate__valid_character_range(current, '#', '#')) {
             // add lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__hashtag, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__hashtag, ANVIL__create__buffer(current.start, current.start), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
             (*lexlings).data.count++;
 
             // next character
@@ -342,7 +328,7 @@ void COMPILER__compile__lex_one_buffer(COMPILER__lexlings* lexlings, ANVIL__buff
             data.end = current.start;
 
             // append lexling
-            COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__string_literal, data, COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, data))), error);
+            COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__string_literal, data, COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, data))), error);
             (*lexlings).data.count++;
 
             // next character
@@ -364,7 +350,7 @@ void COMPILER__compile__lex_one_buffer(COMPILER__lexlings* lexlings, ANVIL__buff
     }
 
     // append eof lexling
-    COMPILER__append__lexling(&(*lexlings).data.list, COMPILER__create__lexling(COMPILER__lt__end_of_file, ANVIL__open__buffer_from_string((u8*)"[EOF]", ANVIL__bt__false, ANVIL__bt__false), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
+    COMPILER__append(&(*lexlings).data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__end_of_file, ANVIL__open__buffer_from_string((u8*)"[EOF]", ANVIL__bt__false, ANVIL__bt__false), COMPILER__create__character_location(file_index, current_line_number, COMPILER__calculate__character_index(user_code, current))), error);
 
     // quit
     quit:
@@ -435,7 +421,7 @@ COMPILER__lexlings COMPILER__compile__lex(ANVIL__buffer included_files, ANVIL__b
     quit:
 
     // append eofs lexling
-    COMPILER__append__lexling(&output.data.list, COMPILER__create__lexling(COMPILER__lt__end_of_files, ANVIL__open__buffer_from_string((u8*)"[EOFS]", ANVIL__bt__false, ANVIL__bt__false), COMPILER__create__character_location(file_index, -1, -1)), error);
+    COMPILER__append(&output.data.list, COMPILER__lexling, COMPILER__create__lexling(COMPILER__lt__end_of_files, ANVIL__open__buffer_from_string((u8*)"[EOFS]", ANVIL__bt__false, ANVIL__bt__false), COMPILER__create__character_location(file_index, -1, -1)), error);
 
     return output;
 }

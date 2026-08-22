@@ -1299,7 +1299,7 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
         // get inputs
         for (COMPILER__input_count input_ID = 0; input_ID < input_count; input_ID++) {
             // get type
-            COMPILER__append__structure_index(&header.input_types.list, (COMPILER__structure_index)COMPILER__read_and_next__blueprintling(&current_blueprintling), error);
+            COMPILER__append(&header.input_types.list, COMPILER__structure_index, (COMPILER__structure_index)COMPILER__read_and_next__blueprintling(&current_blueprintling), error);
             if (COMPILER__check__error_occured(error)) {
                 return headers;
             }
@@ -1315,7 +1315,7 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
         // get outputs
         for (COMPILER__output_count output_ID = 0; output_ID < output_count; output_ID++) {
             // get type
-            COMPILER__append__structure_index(&header.output_types.list, (COMPILER__structure_index)COMPILER__read_and_next__blueprintling(&current_blueprintling), error);
+            COMPILER__append(&header.output_types.list, COMPILER__structure_index, (COMPILER__structure_index)COMPILER__read_and_next__blueprintling(&current_blueprintling), error);
             if (COMPILER__check__error_occured(error)) {
                 return headers;
             }
@@ -1351,12 +1351,12 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
         }
 
         // append io data
-        COMPILER__append__structure_index(&header.input_types.list, COMPILER__aat__COUNT + index, error);
+        COMPILER__append(&header.input_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + index, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
         header.input_types.count = 1;
-        COMPILER__append__structure_index(&header.output_types.list, COMPILER__aat__COUNT + index, error);
+        COMPILER__append(&header.output_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + index, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
@@ -1391,7 +1391,7 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
         // append each input
         for (COMPILER__structure_member_index member_index = 0; member_index < ((COMPILER__accountling_structure*)structures.data_table.list.buffer.start)[structure_index].members.count; member_index++) {
             // append input
-            COMPILER__append__structure_index(&header.input_types.list, COMPILER__aat__COUNT + ((COMPILER__accountling_structure_member*)((COMPILER__accountling_structure*)structures.data_table.list.buffer.start)[structure_index].members.list.buffer.start)[member_index].structure_ID, error);
+            COMPILER__append(&header.input_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + ((COMPILER__accountling_structure_member*)((COMPILER__accountling_structure*)structures.data_table.list.buffer.start)[structure_index].members.list.buffer.start)[member_index].structure_ID, error);
             if (COMPILER__check__error_occured(error)) {
                 return headers;
             }
@@ -1406,7 +1406,7 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
         }
         
         // append destination
-        COMPILER__append__structure_index(&header.output_types.list, COMPILER__aat__COUNT + structure_index, error);
+        COMPILER__append(&header.output_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + structure_index, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
@@ -1447,7 +1447,7 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
         }
         
         // append destination
-        COMPILER__append__structure_index(&header.output_types.list, COMPILER__aat__COUNT + structure_index, error);
+        COMPILER__append(&header.output_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + structure_index, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
@@ -1479,12 +1479,12 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
             return headers;
         }
         // append packer starting point value
-        COMPILER__append__structure_index(&header.input_types.list, COMPILER__aat__variable, error);
+        COMPILER__append(&header.input_types.list, COMPILER__structure_index, COMPILER__aat__variable, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
         // append packer increment by value
-        COMPILER__append__structure_index(&header.input_types.list, COMPILER__aat__variable, error);
+        COMPILER__append(&header.input_types.list, COMPILER__structure_index, COMPILER__aat__variable, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
@@ -1498,7 +1498,7 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
         }
         
         // append destination
-        COMPILER__append__structure_index(&header.output_types.list, COMPILER__aat__COUNT + structure_index, error);
+        COMPILER__append(&header.output_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + structure_index, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
@@ -1530,7 +1530,7 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
             return headers;
         }
         // append structure
-        COMPILER__append__structure_index(&header.input_types.list, COMPILER__aat__COUNT + structure_index, error);
+        COMPILER__append(&header.input_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + structure_index, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
@@ -1543,7 +1543,7 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
             return headers;
         }
         // append structure
-        COMPILER__append__structure_index(&header.output_types.list, COMPILER__aat__COUNT + COMPILER__ptt__dragon_cell, error);
+        COMPILER__append(&header.output_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + COMPILER__ptt__dragon_cell, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
@@ -1575,12 +1575,12 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
             return headers;
         }
         // append structure
-        COMPILER__append__structure_index(&header.input_types.list, COMPILER__aat__COUNT + structure_index, error);
+        COMPILER__append(&header.input_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + structure_index, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
         // append structure
-        COMPILER__append__structure_index(&header.input_types.list, COMPILER__aat__COUNT + COMPILER__ptt__dragon_buffer, error);
+        COMPILER__append(&header.input_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + COMPILER__ptt__dragon_buffer, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
@@ -1593,7 +1593,7 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
             return headers;
         }
         // append structure
-        COMPILER__append__structure_index(&header.input_types.list, COMPILER__aat__COUNT + COMPILER__ptt__dragon_cell, error);
+        COMPILER__append(&header.input_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + COMPILER__ptt__dragon_cell, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
@@ -1625,12 +1625,12 @@ COMPILER__accountling_function_headers COMPILER__account__functions__generate_pr
             return headers;
         }
         // append structure
-        COMPILER__append__structure_index(&header.input_types.list, COMPILER__aat__COUNT + COMPILER__ptt__dragon_buffer, error);
+        COMPILER__append(&header.input_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + COMPILER__ptt__dragon_buffer, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
         // append structure
-        COMPILER__append__structure_index(&header.input_types.list, COMPILER__aat__COUNT + structure_index, error);
+        COMPILER__append(&header.input_types.list, COMPILER__structure_index, COMPILER__aat__COUNT + structure_index, error);
         if (COMPILER__check__error_occured(error)) {
             return headers;
         }
@@ -1682,7 +1682,7 @@ ANVIL__counted_list COMPILER__account__functions__user_defined_function_header_a
         }
 
         // record structure index
-        COMPILER__append__structure_index(&output.list, structure_index + COMPILER__aat__COUNT, error);
+        COMPILER__append(&output.list, COMPILER__structure_index, structure_index + COMPILER__aat__COUNT, error);
         if (COMPILER__check__error_occured(error)) {
             return output;
         }
@@ -2267,7 +2267,8 @@ ANVIL__bt COMPILER__account__functions__check_and_get_statement_translation__set
             }
 
             // add string to library
-            COMPILER__append__buffer_with_error(&(*accountling_function).strings.list, string_data, error);
+            //COMPILER__append__buffer_with_error(&(*accountling_function).strings.list, string_data, error);
+            COMPILER__append(&(*accountling_function).strings.list, ANVIL__buffer, string_data, error);
             (*accountling_function).strings.count++;
             if (COMPILER__check__error_occured(error)) {
                 goto failure;

@@ -1261,45 +1261,13 @@ void COMPILER__close__error(COMPILER__error error) {
 }
 
 /* List Functions With Errors */
+// compiler general list appending macro
+#define COMPILER__append(list, type, data, error) ANVIL__list__append(list, type, data, &((*error).memory_error_occured))
+
 // open a list but the error is a compiler error
 ANVIL__list COMPILER__open__list_with_error(ANVIL__list_increase list_increase, COMPILER__error* error) {
     // open with error
     return ANVIL__open__list(list_increase, &((*error).memory_error_occured));
-}
-
-// append a buffer but the error is compiler
-void COMPILER__append__buffer_with_error(ANVIL__list* list, ANVIL__buffer buffer, COMPILER__error* error) {
-    ANVIL__list__append__buffer(list, buffer, &((*error).memory_error_occured));
-
-    return;
-}
-
-// append structure index
-void COMPILER__append__structure_index(ANVIL__list* list, COMPILER__structure_index data, COMPILER__error* error) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(COMPILER__structure_index), &(*error).memory_error_occured);
-
-    // append data
-    (*(COMPILER__structure_index*)ANVIL__calculate__list_current_address(list)) = data;
-
-    // increase fill
-    (*list).filled_index += sizeof(COMPILER__structure_index);
-
-    return;
-}
-
-// append function header index
-void COMPILER__append__function_header_index(ANVIL__list* list, COMPILER__function_header_index data, COMPILER__error* error) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(COMPILER__function_header_index), &(*error).memory_error_occured);
-
-    // append data
-    (*(COMPILER__function_header_index*)ANVIL__calculate__list_current_address(list)) = data;
-
-    // increase fill
-    (*list).filled_index += sizeof(COMPILER__function_header_index);
-
-    return;
 }
 
 /* Counted List Functions With Errors */

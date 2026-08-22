@@ -36,7 +36,7 @@ COMPILER__namespace COMPILER__open__namespace_from_single_lexling(COMPILER__lexl
     }
 
     // append lexling
-    COMPILER__append__lexling(&output.lexlings.list, lexling, error);
+    COMPILER__append(&output.lexlings.list, COMPILER__lexling, lexling, error);
     output.lexlings.count++;
     if (COMPILER__check__error_occured(error)) {
         return output;
@@ -96,7 +96,6 @@ ANVIL__bt COMPILER__check__namespace_against_c_string(const char* string, COMPIL
     // return comparison
     return COMPILER__check__identical_namespaces(temp_name, checking);
 }
-
 
 // parsling argument
 typedef struct COMPILER__parsling_argument {
@@ -215,6 +214,29 @@ COMPILER__parsling_structure COMPILER__create_null__parsling_structure() {
     return COMPILER__create__parsling_structure(ANVIL__create_null__counted_list(), ANVIL__create_null__counted_list());
 }
 
+// one alias
+typedef struct COMPILER__parsling_alias {
+    COMPILER__parsling_argument new_name;
+    COMPILER__parsling_argument old_name;
+} COMPILER__parsling_alias;
+
+// create a custom alias
+COMPILER__parsling_alias COMPILER__create__parsling_alias(COMPILER__parsling_argument new_name, COMPILER__parsling_argument old_name) {
+    COMPILER__parsling_alias output;
+
+    // setup output
+    output.new_name = new_name;
+    output.old_name = old_name;
+
+    return output;
+}
+
+// create a null alias
+COMPILER__parsling_alias COMPILER__create_null__parsling_alias() {
+    // return empty
+    return COMPILER__create__parsling_alias(COMPILER__create_null__parsling_argument(), COMPILER__create_null__parsling_argument());
+}
+
 // one function
 typedef struct COMPILER__parsling_function {
     COMPILER__parsling_statement header;
@@ -242,15 +264,17 @@ COMPILER__parsling_function COMPILER__create_null__parsling_function() {
 typedef struct COMPILER__parsling_program {
     ANVIL__counted_list functions; // COMPILER__parsling_function
     ANVIL__counted_list structures; // COMPILER__parsling_structure
+    ANVIL__counted_list aliases; // COMPILER__parsling_alias
 } COMPILER__parsling_program;
 
 // create a custom program
-COMPILER__parsling_program COMPILER__create__parsling_program(ANVIL__counted_list functions, ANVIL__counted_list structures) {
+COMPILER__parsling_program COMPILER__create__parsling_program(ANVIL__counted_list functions, ANVIL__counted_list structures, ANVIL__counted_list aliases) {
     COMPILER__parsling_program output;
 
     // setup output
     output.functions = functions;
     output.structures = structures;
+    output.aliases = aliases;
 
     return output;
 }
@@ -258,7 +282,7 @@ COMPILER__parsling_program COMPILER__create__parsling_program(ANVIL__counted_lis
 // create a null program
 COMPILER__parsling_program COMPILER__create_null__parsling_program() {
     // return empty
-    return COMPILER__create__parsling_program(ANVIL__create_null__counted_list(), ANVIL__create_null__counted_list());
+    return COMPILER__create__parsling_program(ANVIL__create_null__counted_list(), ANVIL__create_null__counted_list(), ANVIL__create_null__counted_list());
 }
 
 // append namespace
@@ -313,6 +337,20 @@ void COMPILER__append__parsling_structure(ANVIL__list* list, COMPILER__parsling_
 
     // increase fill
     (*list).filled_index += sizeof(COMPILER__parsling_structure);
+
+    return;
+}
+
+// append parsling alias
+void COMPILER__append__parsling_alias(ANVIL__list* list, COMPILER__parsling_alias data, COMPILER__error* error) {
+    // request space
+    ANVIL__list__request__space(list, sizeof(COMPILER__parsling_alias), &(*error).memory_error_occured);
+
+    // append data
+    (*(COMPILER__parsling_alias*)ANVIL__calculate__list_current_address(list)) = data;
+
+    // increase fill
+    (*list).filled_index += sizeof(COMPILER__parsling_alias);
 
     return;
 }
@@ -519,7 +557,7 @@ COMPILER__namespace COMPILER__parse__namespace__one_name_only(ANVIL__current* cu
     // check for name
     if (ANVIL__check__current_within_range(*current) && COMPILER__read__lexling_from_current(*current).type == COMPILER__lt__name) {
         // append lexling
-        COMPILER__append__lexling(&output.lexlings.list, COMPILER__read__lexling_from_current(*current), error);
+        COMPILER__append(&output.lexlings.list, COMPILER__lexling, COMPILER__read__lexling_from_current(*current), error);
         if (COMPILER__check__error_occured(error)) {
             return output;
         }
@@ -551,7 +589,7 @@ COMPILER__namespace COMPILER__parse__namespace(ANVIL__current* current, COMPILER
     // check for initial name
     if (ANVIL__check__current_within_range(*current) && COMPILER__read__lexling_from_current(*current).type == COMPILER__lt__name) {
         // append lexling
-        COMPILER__append__lexling(&output.lexlings.list, COMPILER__read__lexling_from_current(*current), error);
+        COMPILER__append(&output.lexlings.list, COMPILER__lexling, COMPILER__read__lexling_from_current(*current), error);
         if (COMPILER__check__error_occured(error)) {
             return output;
         }
@@ -570,7 +608,7 @@ COMPILER__namespace COMPILER__parse__namespace(ANVIL__current* current, COMPILER
             // get name
             if (ANVIL__check__current_within_range(*current) && COMPILER__read__lexling_from_current(*current).type == COMPILER__lt__name) {
                 // append name
-                COMPILER__append__lexling(&output.lexlings.list, COMPILER__read__lexling_from_current(*current), error);
+                COMPILER__append(&output.lexlings.list, COMPILER__lexling, COMPILER__read__lexling_from_current(*current), error);
                 if (COMPILER__check__error_occured(error)) {
                     return output;
                 }
@@ -591,7 +629,7 @@ COMPILER__namespace COMPILER__parse__namespace(ANVIL__current* current, COMPILER
     // if it is a string
     } else if (ANVIL__check__current_within_range(*current) && COMPILER__read__lexling_from_current(*current).type == COMPILER__lt__string_literal) {
         // append string
-        COMPILER__append__lexling(&output.lexlings.list, COMPILER__read__lexling_from_current(*current), error);
+        COMPILER__append(&output.lexlings.list, COMPILER__lexling, COMPILER__read__lexling_from_current(*current), error);
         if (COMPILER__check__error_occured(error)) {
             return output;
         }
@@ -1047,6 +1085,9 @@ COMPILER__parsling_program COMPILER__parse__program(COMPILER__lexlings lexlings,
     if (COMPILER__check__error_occured(error)) {
         goto quit;
     }
+
+    // open the aliases list
+    // TODO
 
     // setup current
     current_lexling = ANVIL__calculate__list_current_buffer(&lexlings.data.list);

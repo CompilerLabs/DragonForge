@@ -89,7 +89,7 @@ int main(int argc, char** argv) {
             }
 
             // add file
-            COMPILER__append__buffer_with_error(&files, file, &error);
+            COMPILER__append(&files, ANVIL__buffer, file, &error);
             if (COMPILER__check__error_occured(&error) == ANVIL__bt__true) {
                 printf("Error, could not add buffer to inputs list.");
 

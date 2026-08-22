@@ -620,19 +620,8 @@ void ANVIL__list__append__buffer_data(ANVIL__list* list, ANVIL__buffer buffer, A
     return;
 }
 
-// add a list to a list
-void ANVIL__list__append__list(ANVIL__list* list, ANVIL__list data, ANVIL__bt* memory_error_occured) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(ANVIL__list), memory_error_occured);
-
-    // append data
-    (*(ANVIL__list*)ANVIL__calculate__list_current_address(list)) = data;
-
-    // increase fill
-    (*list).filled_index += sizeof(ANVIL__list);
-
-    return;
-}
+// macro for appending anything to a list
+#define ANVIL__list__append(list_address, type, data, error_occured) { ANVIL__list__request__space(list_address, sizeof(type), error_occured); (*(type *)ANVIL__calculate__list_current_address(list_address)) = data; (*list_address).filled_index += sizeof(type); }
 
 // remove a slice of data from a list
 void ANVIL__list__erase__space(ANVIL__list* list, ANVIL__list_filled_index range_start_index, ANVIL__list_filled_index range_end_index) {
