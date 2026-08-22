@@ -109,20 +109,6 @@ COMPILER__lexling COMPILER__get__lexling_by_index(ANVIL__counted_list lexlings, 
     return ((COMPILER__lexling*)lexlings.list.buffer.start)[index];
 }
 
-// append a lexlings to the list
-void COMPILER__append__lexlings(ANVIL__list* list, COMPILER__lexlings lexlings, COMPILER__error* error) {
-    // request space
-    ANVIL__list__request__space(list, sizeof(COMPILER__lexlings), &(*error).memory_error_occured);
-
-    // append data
-    (*(COMPILER__lexlings*)ANVIL__calculate__list_current_address(list)) = lexlings;
-
-    // increase fill
-    (*list).filled_index += sizeof(COMPILER__lexlings);
-
-    return;
-}
-
 // read a lexling from an address
 COMPILER__lexling COMPILER__read__lexling_from_current(ANVIL__current current) {
     // return struct
