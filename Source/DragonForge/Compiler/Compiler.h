@@ -3,11 +3,11 @@
 
 /* Include */
 // compiler subparts
-#include "lexer.h"
-#include "parser.h"
-#include "accounter.h"
-#include "generator.h"
-#include "standard.h"
+#include "Lexer.h"
+#include "Parser.h"
+#include "Accounter.h"
+#include "Generator.h"
+#include "Standard.h"
 
 /* Compilation Unit */
 // one compiled object across multiple stages
@@ -286,19 +286,19 @@ void COMPILER__compile__files(ANVIL__buffer user_codes, ANVIL__bt include_standa
         }
 
         // append files
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_print_df, __source_dragon_forge_standard_print_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_cast_df, __source_dragon_forge_standard_cast_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_buffer_df, __source_dragon_forge_standard_buffer_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_current_df, __source_dragon_forge_standard_current_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_list_df, __source_dragon_forge_standard_list_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_context_df, __source_dragon_forge_standard_context_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_check_df, __source_dragon_forge_standard_check_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_error_df, __source_dragon_forge_standard_error_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_json_df, __source_dragon_forge_standard_json_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_time_df, __source_dragon_forge_standard_time_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_anvil_df, __source_dragon_forge_standard_anvil_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_compile_df, __source_dragon_forge_standard_compile_df_len), &(*error).memory_error_occured);
-        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__source_dragon_forge_standard_just_run_df, __source_dragon_forge_standard_just_run_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_print_df, __Source_DragonForge_Standard_print_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_cast_df, __Source_DragonForge_Standard_cast_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_buffer_df, __Source_DragonForge_Standard_buffer_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_current_df, __Source_DragonForge_Standard_current_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_list_df, __Source_DragonForge_Standard_list_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_context_df, __Source_DragonForge_Standard_context_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_check_df, __Source_DragonForge_Standard_check_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_error_df, __Source_DragonForge_Standard_error_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_json_df, __Source_DragonForge_Standard_json_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_time_df, __Source_DragonForge_Standard_time_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_anvil_df, __Source_DragonForge_Standard_anvil_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_compile_df, __Source_DragonForge_Standard_compile_df_len), &(*error).memory_error_occured);
+        ANVIL__list__append__buffer(&compilation_unit.standard_files, STANDARD__bufferify__any_file(__Source_DragonForge_Standard_just_run_df, __Source_DragonForge_Standard_just_run_df_len), &(*error).memory_error_occured);
 
         // create content buffer
         standard_files = ANVIL__calculate__list_current_buffer(&compilation_unit.standard_files);

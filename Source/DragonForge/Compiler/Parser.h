@@ -2,8 +2,8 @@
 #define DRAGON__compiler__parser
 
 /* Include */
-#include "compiler_specifications.h"
-#include "lexer.h"
+#include "CompilerSpecifications.h"
+#include "Lexer.h"
 
 /* Parser */
 // namespace struct

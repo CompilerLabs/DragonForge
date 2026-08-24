@@ -2,7 +2,7 @@
 #define DRAGON__compiler__lexer
 
 /* Include */
-#include "compiler_specifications.h"
+#include "CompilerSpecifications.h"
 
 /* Lexer */
 // lexing types

@@ -2,8 +2,8 @@
 #define DRAGON__compiler__accounter
 
 /* Include */
-#include "compiler_specifications.h"
-#include "parser.h"
+#include "CompilerSpecifications.h"
+#include "Parser.h"
 
 /* Account */
 // one structure member

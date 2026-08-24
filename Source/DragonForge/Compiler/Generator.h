@@ -2,8 +2,8 @@
 #define DRAGON__compiler__generator
 
 /* Include */
-#include "accounter.h"
-#include "compiler_specifications.h"
+#include "Accounter.h"
+#include "CompilerSpecifications.h"
 
 /* Generation */
 // one function

@@ -2,7 +2,7 @@
 #define DRAGON__anvil
 
 /* Include */
-#include "dragon-forge/compiler/compiler.h"
+#include "DragonForge/Compiler/Compiler.h"
 
 /* Allocations */
 // allocations
