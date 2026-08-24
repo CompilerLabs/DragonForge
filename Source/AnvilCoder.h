@@ -14,7 +14,7 @@ typedef enum ANVIL__pt {
 } ANVIL__pt;
 
 // offsets
-typedef ANVIL__u64 ANVIL__offset;
+typedef BASIC__u64 ANVIL__offset;
 
 // invalid offset placeholder
 #define ANVIL__invalid_offset -1
@@ -22,13 +22,13 @@ typedef ANVIL__u64 ANVIL__offset;
 // instruction creation container
 typedef struct ANVIL__workspace {
     ANVIL__pt pass;
-    ANVIL__u64 current_program_offset;
-    ANVIL__address write_to;
-    ANVIL__buffer* program_buffer;
+    BASIC__u64 current_program_offset;
+    BASIC__address write_to;
+    BASIC__buffer* program_buffer;
 } ANVIL__workspace;
 
 // setup workspace
-ANVIL__workspace ANVIL__setup__workspace(ANVIL__buffer* program_buffer_destination) {
+ANVIL__workspace ANVIL__setup__workspace(BASIC__buffer* program_buffer_destination) {
     ANVIL__workspace output;
 
     // setup output
@@ -59,7 +59,7 @@ void ANVIL__setup__pass(ANVIL__workspace* workspace, ANVIL__pt pass) {
         break;
     case ANVIL__pt__write_program:
         // allocate program buffer
-        (*(*workspace).program_buffer) = ANVIL__open__buffer((*workspace).current_program_offset);
+        (*(*workspace).program_buffer) = BASIC__open__buffer((*workspace).current_program_offset);
 
         // setup pass
         (*workspace).current_program_offset = 0;
@@ -75,12 +75,12 @@ void ANVIL__setup__pass(ANVIL__workspace* workspace, ANVIL__pt pass) {
 
 /* Appending */
 // add an offset to a list
-void ANVIL__append__offset(ANVIL__list* list, ANVIL__offset offset, ANVIL__bt* memory_error_occured) {
+void ANVIL__append__offset(BASIC__list* list, ANVIL__offset offset, BASIC__bt* memory_error_occured) {
     // request space
-    ANVIL__list__request__space(list, sizeof(ANVIL__offset), memory_error_occured);
+    BASIC__list__request__space(list, sizeof(ANVIL__offset), memory_error_occured);
 
     // append data
-    (*(ANVIL__offset*)ANVIL__calculate__list_current_address(list)) = offset;
+    (*(ANVIL__offset*)BASIC__calculate__list_current_address(list)) = offset;
 
     // increase fill
     (*list).filled_index += sizeof(ANVIL__offset);
@@ -98,7 +98,7 @@ void ANVIL__write_next__instruction_ID(ANVIL__workspace* workspace, ANVIL__instr
 
     // advance
     (*workspace).current_program_offset += sizeof(ANVIL__instruction_ID);
-    (*workspace).write_to = (ANVIL__address)((u64)(*workspace).write_to + sizeof(ANVIL__instruction_ID));
+    (*workspace).write_to = (BASIC__address)((u64)(*workspace).write_to + sizeof(ANVIL__instruction_ID));
 
     return;
 }
@@ -112,7 +112,7 @@ void ANVIL__write_next__flag_ID(ANVIL__workspace* workspace, ANVIL__flag_ID flag
 
     // advance
     (*workspace).current_program_offset += sizeof(ANVIL__flag_ID);
-    (*workspace).write_to = (ANVIL__address)((u64)(*workspace).write_to + sizeof(ANVIL__flag_ID));
+    (*workspace).write_to = (BASIC__address)((u64)(*workspace).write_to + sizeof(ANVIL__flag_ID));
 
     return;
 }
@@ -126,7 +126,7 @@ void ANVIL__write_next__operation_ID(ANVIL__workspace* workspace, ANVIL__operati
 
     // advance
     (*workspace).current_program_offset += sizeof(ANVIL__operation_ID);
-    (*workspace).write_to = (ANVIL__address)((u64)(*workspace).write_to + sizeof(ANVIL__operation_ID));
+    (*workspace).write_to = (BASIC__address)((u64)(*workspace).write_to + sizeof(ANVIL__operation_ID));
 
     return;
 }
@@ -140,7 +140,7 @@ void ANVIL__write_next__cell_ID(ANVIL__workspace* workspace, ANVIL__cell_ID cell
 
     // advance
     (*workspace).current_program_offset += sizeof(ANVIL__cell_ID);
-    (*workspace).write_to = (ANVIL__address)((u64)(*workspace).write_to + sizeof(ANVIL__cell_ID));
+    (*workspace).write_to = (BASIC__address)((u64)(*workspace).write_to + sizeof(ANVIL__cell_ID));
 
     return;
 }
@@ -154,40 +154,40 @@ void ANVIL__write_next__cell(ANVIL__workspace* workspace, ANVIL__cell cell_value
 
     // advance
     (*workspace).current_program_offset += sizeof(ANVIL__cell);
-    (*workspace).write_to = (ANVIL__address)((u64)(*workspace).write_to + sizeof(ANVIL__cell));
+    (*workspace).write_to = (BASIC__address)((u64)(*workspace).write_to + sizeof(ANVIL__cell));
 
     return;
 }
 
 // write buffer
-void ANVIL__write_next__buffer(ANVIL__workspace* workspace, ANVIL__buffer buffer) {
-    ANVIL__length buffer_length;
+void ANVIL__write_next__buffer(ANVIL__workspace* workspace, BASIC__buffer buffer) {
+    BASIC__length buffer_length;
 
     // set buffer length
-    buffer_length = ANVIL__calculate__buffer_length(buffer);
+    buffer_length = BASIC__calculate__buffer_length(buffer);
 
     // write buffer
     if ((*workspace).pass == ANVIL__pt__write_program) {
         // write buffer length
-        ANVIL__write__buffer(buffer_length, sizeof(ANVIL__length), (*workspace).write_to);
+        BASIC__write__buffer(buffer_length, sizeof(BASIC__length), (*workspace).write_to);
 
         // copy buffer
-        for (ANVIL__length byte_index = 0; byte_index < buffer_length; byte_index++) {
+        for (BASIC__length byte_index = 0; byte_index < buffer_length; byte_index++) {
             // copy character
-            ((ANVIL__u8*)(*workspace).write_to)[byte_index + sizeof(ANVIL__length)] = ((ANVIL__u8*)buffer.start)[byte_index];
+            ((BASIC__u8*)(*workspace).write_to)[byte_index + sizeof(BASIC__length)] = ((BASIC__u8*)buffer.start)[byte_index];
         }
     }
 
     // advance
-    (*workspace).current_program_offset += buffer_length + sizeof(ANVIL__length);
-    (*workspace).write_to = (ANVIL__address)((u64)(*workspace).write_to + buffer_length + sizeof(ANVIL__length));
+    (*workspace).current_program_offset += buffer_length + sizeof(BASIC__length);
+    (*workspace).write_to = (BASIC__address)((u64)(*workspace).write_to + buffer_length + sizeof(BASIC__length));
 
     return;
 }
 
 /* Write Instructions */
 // write buffer data
-void ANVIL__code__buffer(ANVIL__workspace* workspace, ANVIL__buffer buffer) {
+void ANVIL__code__buffer(ANVIL__workspace* workspace, BASIC__buffer buffer) {
     // write data
     ANVIL__write_next__buffer(workspace, buffer);
 
@@ -589,7 +589,7 @@ typedef u64 ANVIL__stack_size;
 
 /* Context IO */
 // pass input
-void ANVIL__set__input(ANVIL__context* context, ANVIL__buffer input) {
+void ANVIL__set__input(ANVIL__context* context, BASIC__buffer input) {
     // write data to cells
     (*context).cells[ANVIL__srt__input_buffer_start] = (ANVIL__cell)input.start;
     (*context).cells[ANVIL__srt__input_buffer_end] = (ANVIL__cell)input.end;
@@ -733,7 +733,7 @@ void ANVIL__code__start(ANVIL__workspace* workspace, ANVIL__stack_size stack_siz
     ANVIL__code__write_cell(workspace, (ANVIL__cell)ANVIL__et__no_error, ANVIL__rt__error_code);
 
     // setup address catcher (default is enabled)
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)ANVIL__bt__true, ANVIL__rt__address_catch_toggle);
+    ANVIL__code__write_cell(workspace, (ANVIL__cell)BASIC__bt__true, ANVIL__rt__address_catch_toggle);
 
     // setup flag cells
     ANVIL__code__write_cell(workspace, (ANVIL__cell)1, ANVIL__rt__flags_0);
@@ -903,7 +903,7 @@ void ANVIL__code__retrieve_embedded_buffer(ANVIL__workspace* workspace, ANVIL__f
     ANVIL__code__calculate_dynamically__offset_address(workspace, flag, program_offset, ANVIL__srt__temp__address);
 
     // get buffer length
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(ANVIL__length), ANVIL__srt__temp__byte_count);
+    ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(BASIC__length), ANVIL__srt__temp__byte_count);
     ANVIL__code__address_to_cell(workspace, flag, ANVIL__srt__temp__address, ANVIL__srt__temp__byte_count, ANVIL__srt__temp__length);
 
     // calculate buffer data start
@@ -946,12 +946,12 @@ void ANVIL__code__calculate__addresses_for_cell_range_from_context(ANVIL__worksp
     ANVIL__code__debug__get_current_context(workspace, ANVIL__srt__temp__buffer_0__start, ANVIL__srt__temp__buffer_0__end);
 
     // setup starting address
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)(ANVIL__u64)range_start, ANVIL__srt__temp__cell_ID);
+    ANVIL__code__write_cell(workspace, (ANVIL__cell)(BASIC__u64)range_start, ANVIL__srt__temp__cell_ID);
     ANVIL__code__operate(workspace, flag, ANVIL__ot__integer_multiply, ANVIL__srt__constant__cell_byte_size, ANVIL__srt__temp__cell_ID, ANVIL__unused_cell_ID, ANVIL__srt__temp__length);
     ANVIL__code__operate(workspace, flag, ANVIL__ot__integer_add, ANVIL__srt__temp__buffer_0__start, ANVIL__srt__temp__length, ANVIL__unused_cell_ID, buffer_start);
 
     // setup end address
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)(ANVIL__u64)range_end + 1, ANVIL__srt__temp__cell_ID);
+    ANVIL__code__write_cell(workspace, (ANVIL__cell)(BASIC__u64)range_end + 1, ANVIL__srt__temp__cell_ID);
     ANVIL__code__operate(workspace, flag, ANVIL__ot__integer_multiply, ANVIL__srt__constant__cell_byte_size, ANVIL__srt__temp__cell_ID, ANVIL__unused_cell_ID, ANVIL__srt__temp__length);
     ANVIL__code__operate(workspace, flag, ANVIL__ot__integer_subtract, ANVIL__srt__temp__length, ANVIL__srt__constant__1, ANVIL__unused_cell_ID, ANVIL__srt__temp__length);
     ANVIL__code__operate(workspace, flag, ANVIL__ot__integer_add, ANVIL__srt__temp__buffer_0__start, ANVIL__srt__temp__length, ANVIL__unused_cell_ID, buffer_end);
@@ -960,11 +960,11 @@ void ANVIL__code__calculate__addresses_for_cell_range_from_context(ANVIL__worksp
 }
 
 // debug, print buffer inline
-void ANVIL__code__debug__print_buffer_inline(ANVIL__workspace* workspace, ANVIL__buffer buffer) {
+void ANVIL__code__debug__print_buffer_inline(ANVIL__workspace* workspace, BASIC__buffer buffer) {
     // print character by character
-    for (ANVIL__u64 character = 0; character < ANVIL__calculate__buffer_length(buffer); character++) {
+    for (BASIC__u64 character = 0; character < BASIC__calculate__buffer_length(buffer); character++) {
         // write character to cell
-        ANVIL__code__write_cell(workspace, (ANVIL__cell)(ANVIL__u64)(((ANVIL__character*)buffer.start)[character]), ANVIL__srt__temp__write);
+        ANVIL__code__write_cell(workspace, (ANVIL__cell)(BASIC__u64)(((BASIC__character*)buffer.start)[character]), ANVIL__srt__temp__write);
 
         // print character
         ANVIL__code__debug__putchar(workspace, ANVIL__srt__temp__write);

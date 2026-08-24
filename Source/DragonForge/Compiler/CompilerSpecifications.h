@@ -7,7 +7,7 @@
 
 /* Define */
 // general compiler types
-typedef ANVIL__u64 COMPILER__index;
+typedef BASIC__u64 COMPILER__index;
 typedef COMPILER__index COMPILER__argument_index;
 typedef COMPILER__index COMPILER__io_count;
 typedef COMPILER__io_count COMPILER__input_count;
@@ -16,14 +16,14 @@ typedef COMPILER__index COMPILER__accountling_index;
 typedef COMPILER__accountling_index COMPILER__variable_index;
 typedef COMPILER__accountling_index COMPILER__variable_type_index;
 typedef COMPILER__accountling_index COMPILER__variable_member_index;
-typedef ANVIL__u64 COMPILER__blueprintling;
+typedef BASIC__u64 COMPILER__blueprintling;
 typedef COMPILER__index COMPILER__function_index;
 typedef COMPILER__index COMPILER__function_header_index;
 typedef COMPILER__index COMPILER__structure_index;
 typedef COMPILER__index COMPILER__structure_member_index;
 typedef COMPILER__structure_member_index COMPILER__structure_member_count;
-typedef ANVIL__buffer COMPILER__structure_handle;
-typedef ANVIL__buffer COMPILER__function_handle;
+typedef BASIC__buffer COMPILER__structure_handle;
+typedef BASIC__buffer COMPILER__function_handle;
 typedef COMPILER__index COMPILER__stack_index;
 typedef COMPILER__index COMPILER__offset_index;
 typedef COMPILER__index COMPILER__scope_index;
@@ -1071,7 +1071,7 @@ COMPILER__cell_range COMPILER__create_null__cell_range() {
 
 /* Blueprints */
 // advance blueprintling by one
-void COMPILER__next__blueprintling(ANVIL__current* current) {
+void COMPILER__next__blueprintling(BASIC__current* current) {
     // next blueprintling
     (*current).start += sizeof(COMPILER__blueprintling);
 
@@ -1079,12 +1079,12 @@ void COMPILER__next__blueprintling(ANVIL__current* current) {
 }
 
 // read one blueprintling but do not advance current
-COMPILER__blueprintling COMPILER__read__blueprintling(ANVIL__current* current) {
+COMPILER__blueprintling COMPILER__read__blueprintling(BASIC__current* current) {
     return *(COMPILER__blueprintling*)(*current).start;
 }
 
 // read one blueprintling and advance current to next one
-COMPILER__blueprintling COMPILER__read_and_next__blueprintling(ANVIL__current* current) {
+COMPILER__blueprintling COMPILER__read_and_next__blueprintling(BASIC__current* current) {
     COMPILER__blueprintling output;
 
     // read output
@@ -1098,8 +1098,8 @@ COMPILER__blueprintling COMPILER__read_and_next__blueprintling(ANVIL__current* c
 
 /* Translation */
 // calculate the amount of digits in a decimal number
-ANVIL__length COMPILER__calculate__decimals_digit_count_in_number(ANVIL__u64 number) {
-    ANVIL__length output = 0;
+BASIC__length COMPILER__calculate__decimals_digit_count_in_number(BASIC__u64 number) {
+    BASIC__length output = 0;
 
     // check for zero
     if (number == 0) {
@@ -1119,22 +1119,22 @@ ANVIL__length COMPILER__calculate__decimals_digit_count_in_number(ANVIL__u64 num
 }
 
 // create buffer string from number
-ANVIL__buffer COMPILER__translate__integer_value_to_string(ANVIL__u64 number) {
-    ANVIL__buffer output;
-    ANVIL__length digit_count;
+BASIC__buffer COMPILER__translate__integer_value_to_string(BASIC__u64 number) {
+    BASIC__buffer output;
+    BASIC__length digit_count;
 
     // count digits
     digit_count = COMPILER__calculate__decimals_digit_count_in_number(number);
 
     // allocate output
-    output = ANVIL__open__buffer(sizeof(ANVIL__character) * digit_count);
+    output = BASIC__open__buffer(sizeof(BASIC__character) * digit_count);
 
     // if allocation succeded
-    if (ANVIL__check__empty_buffer(output) == ANVIL__bt__false) {
+    if (BASIC__check__empty_buffer(output) == BASIC__bt__false) {
         // calculate characters
-        for (ANVIL__u64 i = digit_count; i > 0; i--) {
+        for (BASIC__u64 i = digit_count; i > 0; i--) {
             // create character
-            ((ANVIL__character*)output.start)[i - 1] = '0' + (number % 10);
+            ((BASIC__character*)output.start)[i - 1] = '0' + (number % 10);
 
             // next character
             number /= 10;
@@ -1147,13 +1147,13 @@ ANVIL__buffer COMPILER__translate__integer_value_to_string(ANVIL__u64 number) {
 /* Character Locations */
 // parsing character location
 typedef struct COMPILER__character_location {
-    ANVIL__file_index file_index;
-    ANVIL__line_number line_number;
-    ANVIL__character_index character_index;
+    BASIC__file_index file_index;
+    BASIC__line_number line_number;
+    BASIC__character_index character_index;
 } COMPILER__character_location;
 
 // create custom character marker location
-COMPILER__character_location COMPILER__create__character_location(ANVIL__file_index file_index, ANVIL__line_number line_number, ANVIL__character_index character_index) {
+COMPILER__character_location COMPILER__create__character_location(BASIC__file_index file_index, BASIC__line_number line_number, BASIC__character_index character_index) {
     COMPILER__character_location output;
 
     output.file_index = file_index;
@@ -1171,14 +1171,14 @@ COMPILER__character_location COMPILER__create_null__character_location() {
 /* Errors */
 // error information
 typedef struct COMPILER__error {
-    ANVIL__bt occured;
-    ANVIL__buffer message;
+    BASIC__bt occured;
+    BASIC__buffer message;
     COMPILER__character_location location;
-    ANVIL__bt memory_error_occured;
+    BASIC__bt memory_error_occured;
 } COMPILER__error;
 
 // create custom error
-COMPILER__error COMPILER__create__error(ANVIL__bt occured, ANVIL__buffer message, COMPILER__character_location location, ANVIL__bt memory_error_occured) {
+COMPILER__error COMPILER__create__error(BASIC__bt occured, BASIC__buffer message, COMPILER__character_location location, BASIC__bt memory_error_occured) {
     COMPILER__error output;
 
     // setup output
@@ -1193,58 +1193,58 @@ COMPILER__error COMPILER__create__error(ANVIL__bt occured, ANVIL__buffer message
 // create null error
 COMPILER__error COMPILER__create_null__error() {
     // return empty
-    return COMPILER__create__error(ANVIL__bt__false, ANVIL__create_null__buffer(), COMPILER__create_null__character_location(), ANVIL__bt__false);
+    return COMPILER__create__error(BASIC__bt__false, BASIC__create_null__buffer(), COMPILER__create_null__character_location(), BASIC__bt__false);
 }
 
 // open a specific error
 COMPILER__error COMPILER__open__error(const char* message, COMPILER__character_location location) {
-    return COMPILER__create__error(ANVIL__bt__true, ANVIL__open__buffer_from_string((u8*)message, ANVIL__bt__true, ANVIL__bt__false), location, ANVIL__bt__false);
+    return COMPILER__create__error(BASIC__bt__true, BASIC__open__buffer_from_string((u8*)message, BASIC__bt__true, BASIC__bt__false), location, BASIC__bt__false);
 }
 
 // open a generic memory allocation error
 COMPILER__error COMPILER__open__internal_memory_error() {
-    return COMPILER__create__error(ANVIL__bt__true, ANVIL__open__buffer_from_string((u8*)"Internal memory error.", ANVIL__bt__true, ANVIL__bt__false), COMPILER__create_null__character_location(), ANVIL__bt__true);
+    return COMPILER__create__error(BASIC__bt__true, BASIC__open__buffer_from_string((u8*)"Internal memory error.", BASIC__bt__true, BASIC__bt__false), COMPILER__create_null__character_location(), BASIC__bt__true);
 }
 
 // create an error report in json
-ANVIL__buffer COMPILER__serialize__error_json(COMPILER__error error, ANVIL__bt* error_occured) {
-    ANVIL__buffer output;
-    ANVIL__list json;
-    ANVIL__buffer temp_buffer;
+BASIC__buffer COMPILER__serialize__error_json(COMPILER__error error, BASIC__bt* error_occured) {
+    BASIC__buffer output;
+    BASIC__list json;
+    BASIC__buffer temp_buffer;
 
     // initialize json string builder
-    json = ANVIL__open__list(sizeof(ANVIL__character) * 2048, error_occured);
+    json = BASIC__open__list(sizeof(BASIC__character) * 2048, error_occured);
 
     // generate json
-    ANVIL__list__append__buffer_data(&json, ANVIL__open__buffer_from_string((u8*)"\"error\": {\n\t\"message\": \"", ANVIL__bt__false, ANVIL__bt__false), error_occured);
-    ANVIL__list__append__buffer_data(&json, error.message, error_occured);
-    ANVIL__list__append__buffer_data(&json, ANVIL__open__buffer_from_string((u8*)"\",\n\t\"file_index\": \"", ANVIL__bt__false, ANVIL__bt__false), error_occured);
+    BASIC__list__append__buffer_data(&json, BASIC__open__buffer_from_string((u8*)"\"error\": {\n\t\"message\": \"", BASIC__bt__false, BASIC__bt__false), error_occured);
+    BASIC__list__append__buffer_data(&json, error.message, error_occured);
+    BASIC__list__append__buffer_data(&json, BASIC__open__buffer_from_string((u8*)"\",\n\t\"file_index\": \"", BASIC__bt__false, BASIC__bt__false), error_occured);
     temp_buffer = COMPILER__translate__integer_value_to_string(error.location.file_index);
-    ANVIL__list__append__buffer_data(&json, temp_buffer, error_occured);
-    ANVIL__close__buffer(temp_buffer);
-    ANVIL__list__append__buffer_data(&json, ANVIL__open__buffer_from_string((u8*)"\",\n\t\"line_number\": \"", ANVIL__bt__false, ANVIL__bt__false), error_occured);
+    BASIC__list__append__buffer_data(&json, temp_buffer, error_occured);
+    BASIC__close__buffer(temp_buffer);
+    BASIC__list__append__buffer_data(&json, BASIC__open__buffer_from_string((u8*)"\",\n\t\"line_number\": \"", BASIC__bt__false, BASIC__bt__false), error_occured);
     temp_buffer = COMPILER__translate__integer_value_to_string(error.location.line_number);
-    ANVIL__list__append__buffer_data(&json, temp_buffer, error_occured);
-    ANVIL__close__buffer(temp_buffer);
-    ANVIL__list__append__buffer_data(&json, ANVIL__open__buffer_from_string((u8*)"\",\n\t\"character_index\": \"", ANVIL__bt__false, ANVIL__bt__false), error_occured);
+    BASIC__list__append__buffer_data(&json, temp_buffer, error_occured);
+    BASIC__close__buffer(temp_buffer);
+    BASIC__list__append__buffer_data(&json, BASIC__open__buffer_from_string((u8*)"\",\n\t\"character_index\": \"", BASIC__bt__false, BASIC__bt__false), error_occured);
     temp_buffer = COMPILER__translate__integer_value_to_string(error.location.character_index);
-    ANVIL__list__append__buffer_data(&json, temp_buffer, error_occured);
-    ANVIL__close__buffer(temp_buffer);
-    ANVIL__list__append__buffer_data(&json, ANVIL__open__buffer_from_string((u8*)"\"\n}\n", ANVIL__bt__false, ANVIL__bt__false), error_occured);
+    BASIC__list__append__buffer_data(&json, temp_buffer, error_occured);
+    BASIC__close__buffer(temp_buffer);
+    BASIC__list__append__buffer_data(&json, BASIC__open__buffer_from_string((u8*)"\"\n}\n", BASIC__bt__false, BASIC__bt__false), error_occured);
 
     // create buffer from list
-    output = ANVIL__list__open_buffer_from_list(&json, error_occured);
+    output = BASIC__list__open_buffer_from_list(&json, error_occured);
 
     // clean up list
-    ANVIL__close__list(json);
+    BASIC__close__list(json);
 
     return output;
 }
 
 // check to see if an error occured
-ANVIL__bt COMPILER__check__error_occured(COMPILER__error* error) {
+BASIC__bt COMPILER__check__error_occured(COMPILER__error* error) {
     // check for memory error
-    if ((*error).memory_error_occured == ANVIL__bt__true) {
+    if ((*error).memory_error_occured == BASIC__bt__true) {
         // set error
         *error = COMPILER__open__internal_memory_error();
     }
@@ -1255,136 +1255,136 @@ ANVIL__bt COMPILER__check__error_occured(COMPILER__error* error) {
 // close an error
 void COMPILER__close__error(COMPILER__error error) {
     // clean up buffers
-    ANVIL__close__buffer(error.message);
+    BASIC__close__buffer(error.message);
 
     return;
 }
 
 /* List Functions With Errors */
 // compiler general list appending macro
-#define COMPILER__append(list, type, data, error) ANVIL__list__append(list, type, data, &((*error).memory_error_occured))
+#define COMPILER__append(list, type, data, error) BASIC__list__append(list, type, data, &((*error).memory_error_occured))
 
 // open a list but the error is a compiler error
-ANVIL__list COMPILER__open__list_with_error(ANVIL__list_increase list_increase, COMPILER__error* error) {
+BASIC__list COMPILER__open__list_with_error(BASIC__list_increase list_increase, COMPILER__error* error) {
     // open with error
-    return ANVIL__open__list(list_increase, &((*error).memory_error_occured));
+    return BASIC__open__list(list_increase, &((*error).memory_error_occured));
 }
 
 /* Counted List Functions With Errors */
-ANVIL__counted_list COMPILER__open__counted_list_with_error(ANVIL__list_increase increase, COMPILER__error* error) {
-    return ANVIL__create__counted_list(COMPILER__open__list_with_error(increase, error), 0);
+BASIC__counted_list COMPILER__open__counted_list_with_error(BASIC__list_increase increase, COMPILER__error* error) {
+    return BASIC__create__counted_list(COMPILER__open__list_with_error(increase, error), 0);
 }
 
 /* Conversion */
 // translate string to boolean
-ANVIL__bt COMPILER__translate__string_to_boolean(ANVIL__buffer string, ANVIL__cell_integer_value* value) {
+BASIC__bt COMPILER__translate__string_to_boolean(BASIC__buffer string, ANVIL__cell_integer_value* value) {
     // check possible values
-    if (ANVIL__calculate__buffer_contents_equal(string, ANVIL__open__buffer_from_string((u8*)COMPILER__define__master_namespace ".boolean.false", ANVIL__bt__false, ANVIL__bt__false)) == ANVIL__bt__true) {
-        *value = (ANVIL__cell_integer_value)(ANVIL__bt__false);
+    if (BASIC__calculate__buffer_contents_equal(string, BASIC__open__buffer_from_string((u8*)COMPILER__define__master_namespace ".boolean.false", BASIC__bt__false, BASIC__bt__false)) == BASIC__bt__true) {
+        *value = (ANVIL__cell_integer_value)(BASIC__bt__false);
 
-        return ANVIL__bt__true;
+        return BASIC__bt__true;
     }
-    if (ANVIL__calculate__buffer_contents_equal(string, ANVIL__open__buffer_from_string((u8*)COMPILER__define__master_namespace ".boolean.true", ANVIL__bt__false, ANVIL__bt__false)) == ANVIL__bt__true) {
-        *value = (ANVIL__cell_integer_value)(ANVIL__bt__true);
+    if (BASIC__calculate__buffer_contents_equal(string, BASIC__open__buffer_from_string((u8*)COMPILER__define__master_namespace ".boolean.true", BASIC__bt__false, BASIC__bt__false)) == BASIC__bt__true) {
+        *value = (ANVIL__cell_integer_value)(BASIC__bt__true);
 
-        return ANVIL__bt__true;
+        return BASIC__bt__true;
     }
 
-    return ANVIL__bt__false;
+    return BASIC__bt__false;
 }
 
 // translate string to binary
-ANVIL__bt COMPILER__translate__string_to_binary(ANVIL__buffer string, ANVIL__cell_integer_value* value) {
-    ANVIL__buffer prefix = ANVIL__open__buffer_from_string((u8*)COMPILER__define__master_namespace ".binary.", ANVIL__bt__false, ANVIL__bt__false);
-    ANVIL__buffer current;
-    ANVIL__u64 character_count_limit = sizeof(ANVIL__u64) * ANVIL__define__bits_in_byte;
-    ANVIL__u64 character_count = 0;
+BASIC__bt COMPILER__translate__string_to_binary(BASIC__buffer string, ANVIL__cell_integer_value* value) {
+    BASIC__buffer prefix = BASIC__open__buffer_from_string((u8*)COMPILER__define__master_namespace ".binary.", BASIC__bt__false, BASIC__bt__false);
+    BASIC__buffer current;
+    BASIC__u64 character_count_limit = sizeof(BASIC__u64) * BASIC__define__bits_in_byte;
+    BASIC__u64 character_count = 0;
 
     // check for prefix
-    if (ANVIL__calculate__buffer_starts_with_buffer(string, prefix) == ANVIL__bt__false) {
+    if (BASIC__calculate__buffer_starts_with_buffer(string, prefix) == BASIC__bt__false) {
         // not a binary literal
-        return ANVIL__bt__false;
+        return BASIC__bt__false;
     }
 
     // setup current
-    current = ANVIL__create__buffer(string.start + ANVIL__calculate__buffer_length(prefix), string.end);
+    current = BASIC__create__buffer(string.start + BASIC__calculate__buffer_length(prefix), string.end);
 
     // pre check for all valid characters
-    while (ANVIL__check__current_within_range(current)) {
+    while (BASIC__check__current_within_range(current)) {
         // check character
-        if ((ANVIL__check__character_range_at_current(current, '0', '1') || ANVIL__check__character_range_at_current(current, '_', '_')) == ANVIL__bt__false) {
+        if ((BASIC__check__character_range_at_current(current, '0', '1') || BASIC__check__character_range_at_current(current, '_', '_')) == BASIC__bt__false) {
             // not a binary literal
-            return ANVIL__bt__false;
+            return BASIC__bt__false;
         }
 
         // count binary character
-        if (ANVIL__check__character_range_at_current(current, '0', '1') == ANVIL__bt__true) {
+        if (BASIC__check__character_range_at_current(current, '0', '1') == BASIC__bt__true) {
             character_count++;
         }
 
         // advance current
-        current.start += sizeof(ANVIL__character);
+        current.start += sizeof(BASIC__character);
     }
 
     // check for same character limit
     if (character_count > character_count_limit) {
         // binary literal to large, conversion failed
-        return ANVIL__bt__false;
+        return BASIC__bt__false;
     }
 
     // setup bit index
-    ANVIL__bit_count bit_index = 0;
+    BASIC__bit_count bit_index = 0;
 
     // reset current
-    current = ANVIL__create__buffer(string.start + ANVIL__calculate__buffer_length(prefix), string.end);
+    current = BASIC__create__buffer(string.start + BASIC__calculate__buffer_length(prefix), string.end);
 
     // convert binary string to binary number
-    while (ANVIL__check__current_within_range(current)) {
-        if (ANVIL__check__character_range_at_current(current, '_', '_') == ANVIL__bt__false) {
+    while (BASIC__check__current_within_range(current)) {
+        if (BASIC__check__character_range_at_current(current, '_', '_') == BASIC__bt__false) {
             // append value
-            *value += (((*(ANVIL__character*)current.start) - '0') << bit_index);
+            *value += (((*(BASIC__character*)current.start) - '0') << bit_index);
 
             // next bit index
             bit_index++;
         }
 
         // next character
-        current.start += sizeof(ANVIL__character);
+        current.start += sizeof(BASIC__character);
     }
 
-    return ANVIL__bt__true;
+    return BASIC__bt__true;
 }
 
 // translate string to integer
-ANVIL__bt COMPILER__translate__string_to_integer(ANVIL__buffer string, ANVIL__cell_integer_value* value) {
-    ANVIL__buffer prefix = ANVIL__open__buffer_from_string((u8*)COMPILER__define__master_namespace ".integer.", ANVIL__bt__false, ANVIL__bt__false);
-    ANVIL__buffer suffix;
-    ANVIL__u64 digit = 0;
+BASIC__bt COMPILER__translate__string_to_integer(BASIC__buffer string, ANVIL__cell_integer_value* value) {
+    BASIC__buffer prefix = BASIC__open__buffer_from_string((u8*)COMPILER__define__master_namespace ".integer.", BASIC__bt__false, BASIC__bt__false);
+    BASIC__buffer suffix;
+    BASIC__u64 digit = 0;
 
     // check for prefix
-    if (ANVIL__calculate__buffer_starts_with_buffer(string, prefix) == ANVIL__bt__false) {
+    if (BASIC__calculate__buffer_starts_with_buffer(string, prefix) == BASIC__bt__false) {
         // not an integer literal
-        return ANVIL__bt__false;
+        return BASIC__bt__false;
     }
 
     // create suffix
-    suffix = ANVIL__create__buffer(string.start + ANVIL__calculate__buffer_length(prefix), string.end);
+    suffix = BASIC__create__buffer(string.start + BASIC__calculate__buffer_length(prefix), string.end);
 
     // translate number
     // if number is negative
-    if (*(ANVIL__character*)suffix.start == (ANVIL__character)'n') {
+    if (*(BASIC__character*)suffix.start == (BASIC__character)'n') {
         // for each character
-        for (ANVIL__character_index i = ANVIL__calculate__buffer_length(suffix); i > 1; i--) {
+        for (BASIC__character_index i = BASIC__calculate__buffer_length(suffix); i > 1; i--) {
             // check for valid character
-            if (((((ANVIL__character*)suffix.start)[i - 1] >= '0' && ((ANVIL__character*)suffix.start)[i - 1] <= '9') || ((ANVIL__character*)suffix.start)[i - 1] == '_') == ANVIL__bt__false) {
+            if (((((BASIC__character*)suffix.start)[i - 1] >= '0' && ((BASIC__character*)suffix.start)[i - 1] <= '9') || ((BASIC__character*)suffix.start)[i - 1] == '_') == BASIC__bt__false) {
                 // invalid character
-                return ANVIL__bt__false;
+                return BASIC__bt__false;
             }
 
             // if calculable character
-            if (((ANVIL__character*)suffix.start)[i - 1] != '_') {
+            if (((BASIC__character*)suffix.start)[i - 1] != '_') {
                 // add value
-                *value += ANVIL__calculate__exponent(10, digit) * (((ANVIL__character*)suffix.start)[i - 1] - '0');
+                *value += BASIC__calculate__exponent(10, digit) * (((BASIC__character*)suffix.start)[i - 1] - '0');
 
                 // next digit power
                 digit++;
@@ -1397,17 +1397,17 @@ ANVIL__bt COMPILER__translate__string_to_integer(ANVIL__buffer string, ANVIL__ce
     // if number is positive
     } else {
         // for each character
-        for (ANVIL__character_index i = ANVIL__calculate__buffer_length(suffix); i > 0; i--) {
+        for (BASIC__character_index i = BASIC__calculate__buffer_length(suffix); i > 0; i--) {
             // check for valid character
-            if (((((ANVIL__character*)suffix.start)[i - 1] >= '0' && ((ANVIL__character*)suffix.start)[i - 1] <= '9') || ((ANVIL__character*)suffix.start)[i - 1] == '_') == ANVIL__bt__false) {
+            if (((((BASIC__character*)suffix.start)[i - 1] >= '0' && ((BASIC__character*)suffix.start)[i - 1] <= '9') || ((BASIC__character*)suffix.start)[i - 1] == '_') == BASIC__bt__false) {
                 // invalid character
-                return ANVIL__bt__false;
+                return BASIC__bt__false;
             }
 
             // if calculable character
-            if (((ANVIL__character*)suffix.start)[i - 1] != '_') {
+            if (((BASIC__character*)suffix.start)[i - 1] != '_') {
                 // add value
-                *value += ANVIL__calculate__exponent(10, digit) * (((ANVIL__character*)suffix.start)[i - 1] - '0');
+                *value += BASIC__calculate__exponent(10, digit) * (((BASIC__character*)suffix.start)[i - 1] - '0');
 
                 // next digit power
                 digit++;
@@ -1415,13 +1415,13 @@ ANVIL__bt COMPILER__translate__string_to_integer(ANVIL__buffer string, ANVIL__ce
         }
     }
 
-    return ANVIL__bt__true;
+    return BASIC__bt__true;
 }
 
 // translate character to hexadecimal
-ANVIL__cell_integer_value COMPILER__translate__character_to_hexadecimal(ANVIL__character character, ANVIL__bt* invalid_character) {
+ANVIL__cell_integer_value COMPILER__translate__character_to_hexadecimal(BASIC__character character, BASIC__bt* invalid_character) {
     // set character as valid
-    *invalid_character = ANVIL__bt__false;
+    *invalid_character = BASIC__bt__false;
 
     // translate character
     if (character >= '0' && character <= '9') {
@@ -1432,68 +1432,68 @@ ANVIL__cell_integer_value COMPILER__translate__character_to_hexadecimal(ANVIL__c
         return character - 'A' + 10;
     } else {
         // invalid character
-        *invalid_character = ANVIL__bt__true;
+        *invalid_character = BASIC__bt__true;
     }
 
-    return ANVIL__define__null_address;
+    return BASIC__define__null_address;
 }
 
 // translate string to hexedecimal
-ANVIL__bt COMPILER__translate__string_to_hexadecimal(ANVIL__buffer string, ANVIL__cell_integer_value* value) {
-    ANVIL__buffer prefix = ANVIL__open__buffer_from_string((u8*)COMPILER__define__master_namespace ".hexadecimal.", ANVIL__bt__false, ANVIL__bt__false);
-    ANVIL__buffer suffix;
-    ANVIL__buffer current;
-    ANVIL__bt invalid_character;
+BASIC__bt COMPILER__translate__string_to_hexadecimal(BASIC__buffer string, ANVIL__cell_integer_value* value) {
+    BASIC__buffer prefix = BASIC__open__buffer_from_string((u8*)COMPILER__define__master_namespace ".hexadecimal.", BASIC__bt__false, BASIC__bt__false);
+    BASIC__buffer suffix;
+    BASIC__buffer current;
+    BASIC__bt invalid_character;
     ANVIL__cell_integer_value hex_digit;
 
     // check for prefix
-    if (ANVIL__calculate__buffer_starts_with_buffer(string, prefix) == ANVIL__bt__false) {
+    if (BASIC__calculate__buffer_starts_with_buffer(string, prefix) == BASIC__bt__false) {
         // not a hexadecimal literal
-        return ANVIL__bt__false;
+        return BASIC__bt__false;
     }
 
     // create suffix
-    suffix = ANVIL__create__buffer(string.start + ANVIL__calculate__buffer_length(prefix), string.end);
+    suffix = BASIC__create__buffer(string.start + BASIC__calculate__buffer_length(prefix), string.end);
 
     // create current
     current = suffix;
 
     // validate number
-    while (ANVIL__check__current_within_range(current)) {
+    while (BASIC__check__current_within_range(current)) {
         // check separator
-        if (*(ANVIL__character*)current.start == '_') {
+        if (*(BASIC__character*)current.start == '_') {
             // skip
-            current.start += sizeof(ANVIL__character);
+            current.start += sizeof(BASIC__character);
 
             continue;
         }
 
         // check digit
-        hex_digit = COMPILER__translate__character_to_hexadecimal(*(ANVIL__character*)current.start, &invalid_character);
-        if (invalid_character == ANVIL__bt__true) {
+        hex_digit = COMPILER__translate__character_to_hexadecimal(*(BASIC__character*)current.start, &invalid_character);
+        if (invalid_character == BASIC__bt__true) {
             // invalid digit, invalid hex string
-            return ANVIL__bt__false;
+            return BASIC__bt__false;
         }
 
         // next character
-        current.start += sizeof(ANVIL__character);
+        current.start += sizeof(BASIC__character);
     }
 
     // create current
     current = suffix;
 
     // translate number
-    while (ANVIL__check__current_within_range(current)) {
+    while (BASIC__check__current_within_range(current)) {
         // check separator
-        if (*(ANVIL__character*)current.start == '_') {
+        if (*(BASIC__character*)current.start == '_') {
             // skip
-            current.start += sizeof(ANVIL__character);
+            current.start += sizeof(BASIC__character);
 
             continue;
         }
 
         // check digit
-        hex_digit = COMPILER__translate__character_to_hexadecimal(*(ANVIL__character*)current.start, &invalid_character);
+        hex_digit = COMPILER__translate__character_to_hexadecimal(*(BASIC__character*)current.start, &invalid_character);
 
         // append digit
         *value = (*value) << 4;
@@ -1501,14 +1501,14 @@ ANVIL__bt COMPILER__translate__string_to_hexadecimal(ANVIL__buffer string, ANVIL
         *value = (*value) + hex_digit;
 
         // next character
-        current.start += sizeof(ANVIL__character);
+        current.start += sizeof(BASIC__character);
     }
 
-    return ANVIL__bt__true;
+    return BASIC__bt__true;
 }
 
-ANVIL__buffer COMPILER__convert__general_argument_type_to_string_buffer(COMPILER__pat argument_type) {
-    return ANVIL__open__buffer_from_string((u8*)(COMPILER__global__general_argument_type_names[argument_type]), ANVIL__bt__false, ANVIL__bt__false);
+BASIC__buffer COMPILER__convert__general_argument_type_to_string_buffer(COMPILER__pat argument_type) {
+    return BASIC__open__buffer_from_string((u8*)(COMPILER__global__general_argument_type_names[argument_type]), BASIC__bt__false, BASIC__bt__false);
 }
 
 #endif

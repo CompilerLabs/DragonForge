@@ -22,8 +22,8 @@
 
 /* Turn C Files Into Buffers */
 // bufferify any file
-ANVIL__buffer STANDARD__bufferify__any_file(unsigned char* buffer, unsigned int length) {
-    return ANVIL__create__buffer(buffer, ANVIL__calculate__address_from_buffer_index(buffer, length - 1));
+BASIC__buffer STANDARD__bufferify__any_file(unsigned char* buffer, unsigned int length) {
+    return BASIC__create__buffer(buffer, BASIC__calculate__address_from_buffer_index(buffer, length - 1));
 }
 
 #endif

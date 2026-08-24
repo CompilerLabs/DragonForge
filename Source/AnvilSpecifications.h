@@ -7,20 +7,20 @@
 
 /* Specifications */
 // instructions
-typedef ANVIL__address ANVIL__cell;
-typedef ANVIL__u8 ANVIL__instruction_ID;
-typedef ANVIL__u8 ANVIL__flag_ID;
-typedef ANVIL__u8 ANVIL__operation_ID;
-typedef ANVIL__u16 ANVIL__cell_ID;
-typedef ANVIL__u64 ANVIL__instruction_count;
-#define ANVIL__define__run_forever (ANVIL__u64)-1
+typedef BASIC__address ANVIL__cell;
+typedef BASIC__u8 ANVIL__instruction_ID;
+typedef BASIC__u8 ANVIL__flag_ID;
+typedef BASIC__u8 ANVIL__operation_ID;
+typedef BASIC__u16 ANVIL__cell_ID;
+typedef BASIC__u64 ANVIL__instruction_count;
+#define ANVIL__define__run_forever (BASIC__u64)-1
 #define ANVIL__define__input_string_max_length 256 // is part of fgets instruction and nothing else
 #define ANVIL__define__max_allocation_size 0x100000000
 
 // cell related types
-typedef ANVIL__u64 ANVIL__cell_count;
+typedef BASIC__u64 ANVIL__cell_count;
 typedef ANVIL__cell_count ANVIL__cell_index;
-typedef ANVIL__u64 ANVIL__cell_integer_value;
+typedef BASIC__u64 ANVIL__cell_integer_value;
 #define ANVIL__unused_cell_ID 0
 
 // invalids
