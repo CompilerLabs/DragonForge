@@ -476,8 +476,6 @@ typedef enum ANVIL__srt {
 
     // control flow cells
     ANVIL__srt__return_address,
-    ANVIL__srt__always_run__flag_ID,
-    ANVIL__srt__never_run__flag_ID,
 
     // anvil data cells
     ANVIL__srt__anvil_scraplet__instruction_ID__byte_size,
@@ -757,8 +755,6 @@ void ANVIL__code__start(ANVIL__workspace* workspace, ANVIL__stack_size stack_siz
     ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(ANVIL__cell), ANVIL__srt__constant__cell_byte_size);
     ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(ANVIL__context), ANVIL__srt__constant__context_byte_size);
     ANVIL__code__write_cell(workspace, (ANVIL__cell)ANVIL__silt__jump__explicit, ANVIL__srt__constant__return_address_offset_creation_size);
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)ANVIL__sft__always_run, ANVIL__srt__always_run__flag_ID);
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)ANVIL__sft__never_run, ANVIL__srt__never_run__flag_ID);
 
     // setup anvil scraplet constants
     ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(ANVIL__instruction_ID), ANVIL__srt__anvil_scraplet__instruction_ID__byte_size);
