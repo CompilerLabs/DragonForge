@@ -73,21 +73,6 @@ void ANVIL__setup__pass(ANVIL__workspace* workspace, ANVIL__pt pass) {
     return;
 }
 
-/* Appending */
-// add an offset to a list
-void ANVIL__append__offset(BASIC__list* list, ANVIL__offset offset, BASIC__bt* memory_error_occured) {
-    // request space
-    BASIC__list__request__space(list, sizeof(ANVIL__offset), memory_error_occured);
-
-    // append data
-    (*(ANVIL__offset*)BASIC__calculate__list_current_address(list)) = offset;
-
-    // increase fill
-    (*list).filled_index += sizeof(ANVIL__offset);
-
-    return;
-}
-
 /* Write Instruction Scraplets */
 // write instruction ID
 void ANVIL__write_next__instruction_ID(ANVIL__workspace* workspace, ANVIL__instruction_ID instruction_ID) {

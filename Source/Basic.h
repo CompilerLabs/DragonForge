@@ -580,9 +580,6 @@ BASIC__buffer BASIC__calculate__list_current_buffer(BASIC__list* list) {
     return BASIC__create__buffer(((*list).buffer.start), BASIC__calculate__list_current_address(list) - 1);
 }
 
-// macro to create custom appender
-
-
 // add a buffer to a list
 void BASIC__list__append__buffer(BASIC__list* list, BASIC__buffer buffer, BASIC__bt* memory_error_occured) {
     // request space
