@@ -462,17 +462,8 @@ typedef enum ANVIL__srt {
     // control flow cells
     ANVIL__srt__return_address,
 
-    // anvil data cells
-    ANVIL__srt__anvil_scraplet__instruction_ID__byte_size,
-    ANVIL__srt__anvil_scraplet__flag_ID__byte_size,
-    ANVIL__srt__anvil_scraplet__operation_ID__byte_size,
-    ANVIL__srt__anvil_scraplet__cell_ID__byte_size,
-    ANVIL__srt__anvil_scraplet__cell__byte_size,
-    ANVIL__srt__anvil_scraplet__operation_ID_value__START,
-    ANVIL__srt__anvil_scraplet__operation_ID_value__END = ANVIL__srt__anvil_scraplet__operation_ID_value__START + ANVIL__ot__COUNT,
-
     // temporary cells
-    ANVIL__srt__temp__write = ANVIL__srt__anvil_scraplet__operation_ID_value__END,
+    ANVIL__srt__temp__write,
     ANVIL__srt__temp__offset,
     ANVIL__srt__temp__address,
     ANVIL__srt__temp__flag,
@@ -740,19 +731,6 @@ void ANVIL__code__start(ANVIL__workspace* workspace, ANVIL__stack_size stack_siz
     ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(ANVIL__cell), ANVIL__srt__constant__cell_byte_size);
     ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(ANVIL__context), ANVIL__srt__constant__context_byte_size);
     ANVIL__code__write_cell(workspace, (ANVIL__cell)ANVIL__silt__jump__explicit, ANVIL__srt__constant__return_address_offset_creation_size);
-
-    // setup anvil scraplet constants
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(ANVIL__instruction_ID), ANVIL__srt__anvil_scraplet__instruction_ID__byte_size);
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(ANVIL__flag_ID), ANVIL__srt__anvil_scraplet__flag_ID__byte_size);
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(ANVIL__operation_ID), ANVIL__srt__anvil_scraplet__operation_ID__byte_size);
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(ANVIL__cell_ID), ANVIL__srt__anvil_scraplet__cell_ID__byte_size);
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)sizeof(ANVIL__cell), ANVIL__srt__anvil_scraplet__cell__byte_size);
-
-    // generate operation ID scraplet constants
-    for (ANVIL__cell_index operation_ID_list_start = ANVIL__srt__anvil_scraplet__operation_ID_value__START; operation_ID_list_start <= ANVIL__srt__anvil_scraplet__operation_ID_value__END; operation_ID_list_start++) {
-        // write cell
-        ANVIL__code__write_cell(workspace, (ANVIL__cell)(ANVIL__ot__START + operation_ID_list_start), operation_ID_list_start);
-    }
 
     // setup outputs
     ANVIL__code__cell_to_cell(workspace, ANVIL__sft__always_run, ANVIL__srt__constant__0, ANVIL__srt__output_result_buffer_start);
