@@ -427,7 +427,7 @@ typedef ANVIL__preserve ANVIL__preserve__end;
 // stack cell types
 typedef enum ANVIL__srt {
     // start of cells
-    ANVIL__srt__START = ANVIL__rt__END,
+    ANVIL__srt__START = ANVIL__ct__END,
 
     // constant cells
     ANVIL__srt__constant__0 = ANVIL__srt__START,
@@ -491,7 +491,7 @@ typedef enum ANVIL__srt {
 
     // locations
     ANVIL__srt__start__workspace = 8192,
-    ANVIL__srt__start__function_io = ANVIL__rt__TOTAL_COUNT - 8192,
+    ANVIL__srt__start__function_io = ANVIL__ct__TOTAL_COUNT - 8192,
 
     // count
     ANVIL__srt__COUNT = ANVIL__srt__END - ANVIL__srt__START,
@@ -627,7 +627,7 @@ void ANVIL__code__calculate__buffer_end_address(ANVIL__workspace* workspace, ANV
 // calculate an address from the program start and an offset cell
 void ANVIL__code__calculate_dynamically__offset_address(ANVIL__workspace* workspace, ANVIL__flag_ID flag, ANVIL__cell_ID offset_cell, ANVIL__cell_ID destination) {
     // calculate address
-    ANVIL__code__operate(workspace, flag, ANVIL__ot__integer_add, ANVIL__rt__program_start_address, offset_cell, ANVIL__unused_cell_ID, destination);
+    ANVIL__code__operate(workspace, flag, ANVIL__ot__integer_add, ANVIL__ct__program_start_address, offset_cell, ANVIL__unused_cell_ID, destination);
 
     return;
 }
@@ -646,7 +646,7 @@ void ANVIL__code__calculate_statically__offset_address(ANVIL__workspace* workspa
 // jump to a specific address
 void ANVIL__code__jump__explicit(ANVIL__workspace* workspace, ANVIL__flag_ID flag, ANVIL__cell_ID address) {
     // jump
-    ANVIL__code__cell_to_cell(workspace, flag, address, ANVIL__rt__program_current_address);
+    ANVIL__code__cell_to_cell(workspace, flag, address, ANVIL__ct__program_current_address);
 
     return;
 }
@@ -665,7 +665,7 @@ void ANVIL__code__jump__static(ANVIL__workspace* workspace, ANVIL__flag_ID flag,
 // create return address
 void ANVIL__code__create_return_address__directly_after_jump(ANVIL__workspace* workspace, ANVIL__flag_ID flag, ANVIL__cell_ID destination) {
     // create offset
-    ANVIL__code__operate(workspace, flag, ANVIL__ot__integer_add, ANVIL__rt__program_current_address, ANVIL__srt__constant__return_address_offset_creation_size, ANVIL__unused_cell_ID, destination);
+    ANVIL__code__operate(workspace, flag, ANVIL__ot__integer_add, ANVIL__ct__program_current_address, ANVIL__srt__constant__return_address_offset_creation_size, ANVIL__unused_cell_ID, destination);
 
     return;
 }
@@ -704,16 +704,16 @@ void ANVIL__code__start(ANVIL__workspace* workspace, ANVIL__stack_size stack_siz
     ANVIL__code__debug__mark_code_section(workspace, 0);
 
     // setup error cell
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)ANVIL__et__no_error, ANVIL__rt__error_code);
+    ANVIL__code__write_cell(workspace, (ANVIL__cell)ANVIL__et__no_error, ANVIL__ct__error_code);
 
     // setup address catcher (default is enabled)
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)BASIC__bt__true, ANVIL__rt__address_catch_toggle);
+    ANVIL__code__write_cell(workspace, (ANVIL__cell)BASIC__bt__true, ANVIL__ct__address_catch_toggle);
 
     // setup flag cells
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)1, ANVIL__rt__flags_0);
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)0, ANVIL__rt__flags_1);
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)0, ANVIL__rt__flags_2);
-    ANVIL__code__write_cell(workspace, (ANVIL__cell)0, ANVIL__rt__flags_3);
+    ANVIL__code__write_cell(workspace, (ANVIL__cell)1, ANVIL__ct__flags_0);
+    ANVIL__code__write_cell(workspace, (ANVIL__cell)0, ANVIL__ct__flags_1);
+    ANVIL__code__write_cell(workspace, (ANVIL__cell)0, ANVIL__ct__flags_2);
+    ANVIL__code__write_cell(workspace, (ANVIL__cell)0, ANVIL__ct__flags_3);
 
     // setup constants
     ANVIL__code__write_cell(workspace, (ANVIL__cell)0, ANVIL__srt__constant__0);
@@ -758,13 +758,13 @@ void ANVIL__code__start(ANVIL__workspace* workspace, ANVIL__stack_size stack_siz
 // preserve workspace
 void ANVIL__code__preserve_workspace(ANVIL__workspace* workspace, ANVIL__flag_ID flag, ANVIL__preserve__start preserve_start, ANVIL__preserve__end preserve_end) {
     // preserve flags
-    ANVIL__code__push_cell(workspace, flag, ANVIL__rt__flags_0);
-    ANVIL__code__push_cell(workspace, flag, ANVIL__rt__flags_1);
-    ANVIL__code__push_cell(workspace, flag, ANVIL__rt__flags_2);
-    ANVIL__code__push_cell(workspace, flag, ANVIL__rt__flags_3);
+    ANVIL__code__push_cell(workspace, flag, ANVIL__ct__flags_0);
+    ANVIL__code__push_cell(workspace, flag, ANVIL__ct__flags_1);
+    ANVIL__code__push_cell(workspace, flag, ANVIL__ct__flags_2);
+    ANVIL__code__push_cell(workspace, flag, ANVIL__ct__flags_3);
 
     // preserve error code
-    ANVIL__code__push_cell(workspace, flag, ANVIL__rt__error_code);
+    ANVIL__code__push_cell(workspace, flag, ANVIL__ct__error_code);
 
     // preserve workspace cells
     for (ANVIL__preserve i = preserve_start; i <= preserve_end; i++) {
@@ -784,13 +784,13 @@ void ANVIL__code__restore_workspace(ANVIL__workspace* workspace, ANVIL__flag_ID 
     }
 
     // restore error code
-    ANVIL__code__pop_cell(workspace, flag, ANVIL__rt__error_code);
+    ANVIL__code__pop_cell(workspace, flag, ANVIL__ct__error_code);
 
     // restore flags
-    ANVIL__code__pop_cell(workspace, flag, ANVIL__rt__flags_3);
-    ANVIL__code__pop_cell(workspace, flag, ANVIL__rt__flags_2);
-    ANVIL__code__pop_cell(workspace, flag, ANVIL__rt__flags_1);
-    ANVIL__code__pop_cell(workspace, flag, ANVIL__rt__flags_0);
+    ANVIL__code__pop_cell(workspace, flag, ANVIL__ct__flags_3);
+    ANVIL__code__pop_cell(workspace, flag, ANVIL__ct__flags_2);
+    ANVIL__code__pop_cell(workspace, flag, ANVIL__ct__flags_1);
+    ANVIL__code__pop_cell(workspace, flag, ANVIL__ct__flags_0);
 
     return;
 }

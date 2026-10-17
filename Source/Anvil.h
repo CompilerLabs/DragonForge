@@ -216,7 +216,7 @@ void ANVIL__set__cell_by_address(ANVIL__cell* destination_cell, ANVIL__cell valu
 // set value in error code cell
 void ANVIL__set__error_code_cell(ANVIL__context* context, ANVIL__et error_code) {
     // set error
-    ANVIL__set__cell_by_address(ANVIL__get__cell_address_from_context(context, ANVIL__rt__error_code), (ANVIL__cell)error_code);
+    ANVIL__set__cell_by_address(ANVIL__get__cell_address_from_context(context, ANVIL__ct__error_code), (ANVIL__cell)error_code);
 
     return;
 }
@@ -226,7 +226,7 @@ BASIC__bt ANVIL__get__flag_from_context(ANVIL__context* context, ANVIL__flag_ID 
     BASIC__u8 masks[8] = { 1, 2, 4, 8, 16, 32, 64, 128 };
 
     // return bit
-    return (BASIC__bt)((((BASIC__u8*)&((*context).cells[ANVIL__rt__flags_0]))[flag_ID / 8] & masks[flag_ID % 8]) > 0);
+    return (BASIC__bt)((((BASIC__u8*)&((*context).cells[ANVIL__ct__flags_0]))[flag_ID / 8] & masks[flag_ID % 8]) > 0);
 }
 
 // set flag (value)
@@ -234,10 +234,10 @@ void ANVIL__set__flag_in_context(ANVIL__context* context, ANVIL__flag_ID flag_ID
     BASIC__u8 masks[8] = { 1, 2, 4, 8, 16, 32, 64, 128 };
 
     // clear bit
-    ((((BASIC__u8*)&((*context).cells[ANVIL__rt__flags_0]))[flag_ID / 8] &= (~masks[flag_ID % 8])));
+    ((((BASIC__u8*)&((*context).cells[ANVIL__ct__flags_0]))[flag_ID / 8] &= (~masks[flag_ID % 8])));
 
     // set bit
-    ((BASIC__u8*)&((*context).cells[ANVIL__rt__flags_0]))[flag_ID / 8] |= (value << (flag_ID % 8));
+    ((BASIC__u8*)&((*context).cells[ANVIL__ct__flags_0]))[flag_ID / 8] |= (value << (flag_ID % 8));
 
     return;
 }
@@ -292,9 +292,9 @@ ANVIL__context ANVIL__setup__context(BASIC__buffer program) {
     ANVIL__context output;
 
     // setup program and execution cells
-    output.cells[ANVIL__rt__program_start_address] = (ANVIL__cell)program.start;
-    output.cells[ANVIL__rt__program_end_address] = (ANVIL__cell)program.end;
-    output.cells[ANVIL__rt__program_current_address] = output.cells[ANVIL__rt__program_start_address];
+    output.cells[ANVIL__ct__program_start_address] = (ANVIL__cell)program.start;
+    output.cells[ANVIL__ct__program_end_address] = (ANVIL__cell)program.end;
+    output.cells[ANVIL__ct__program_current_address] = output.cells[ANVIL__ct__program_start_address];
 
     return output;
 }
@@ -769,13 +769,13 @@ ANVIL__nit ANVIL__run__instruction(ANVIL__allocations* allocations, ANVIL__conte
     BASIC__buffer search_for_allocation__found_buffer;
 
     // setup address catcher toggle
-    catch_addresses = (BASIC__bt)(BASIC__u64)ANVIL__get__cell_from_context(context, ANVIL__rt__address_catch_toggle);
+    catch_addresses = (BASIC__bt)(BASIC__u64)ANVIL__get__cell_from_context(context, ANVIL__ct__address_catch_toggle);
 
     // setup execution read address
-    execution_read_address = ANVIL__get__cell_address_from_context(context, ANVIL__rt__program_current_address);
+    execution_read_address = ANVIL__get__cell_address_from_context(context, ANVIL__ct__program_current_address);
 
     // check for no more instructions
-    if (ANVIL__check__valid_address_range_in_allocations(catch_addresses, allocations, BASIC__create__buffer((*context).cells[ANVIL__rt__program_current_address], (*context).cells[ANVIL__rt__program_current_address] + sizeof(ANVIL__it) - 1)) == BASIC__bt__false) {
+    if (ANVIL__check__valid_address_range_in_allocations(catch_addresses, allocations, BASIC__create__buffer((*context).cells[ANVIL__ct__program_current_address], (*context).cells[ANVIL__ct__program_current_address] + sizeof(ANVIL__it) - 1)) == BASIC__bt__false) {
         // set error code
         ANVIL__set__error_code_cell(context, ANVIL__et__program_ran_out_of_instructions);
 
@@ -787,7 +787,7 @@ ANVIL__nit ANVIL__run__instruction(ANVIL__allocations* allocations, ANVIL__conte
     instruction_ID = (ANVIL__it)ANVIL__read_next__instruction_ID(execution_read_address);
 
     // check for no more instruction parameters
-    if (ANVIL__check__valid_address_range_in_allocations(catch_addresses, allocations, BASIC__create__buffer((*context).cells[ANVIL__rt__program_current_address], (*context).cells[ANVIL__rt__program_current_address] + ANVIL__convert__it_to_ilt(instruction_ID) - sizeof(ANVIL__it) - 1)) == BASIC__bt__false) {
+    if (ANVIL__check__valid_address_range_in_allocations(catch_addresses, allocations, BASIC__create__buffer((*context).cells[ANVIL__ct__program_current_address], (*context).cells[ANVIL__ct__program_current_address] + ANVIL__convert__it_to_ilt(instruction_ID) - sizeof(ANVIL__it) - 1)) == BASIC__bt__false) {
         // set error code
         ANVIL__set__error_code_cell(context, ANVIL__et__program_ran_out_of_instruction_parameters);
 
@@ -1334,7 +1334,7 @@ ANVIL__nit ANVIL__run__instruction(ANVIL__allocations* allocations, ANVIL__conte
         debug__mark_data_section__section_length = ANVIL__read_next__cell(execution_read_address);
 
         // skip over data section
-        (*context).cells[ANVIL__rt__program_current_address] = (BASIC__address)((u64)(*context).cells[ANVIL__rt__program_current_address] + (u64)debug__mark_data_section__section_length);
+        (*context).cells[ANVIL__ct__program_current_address] = (BASIC__address)((u64)(*context).cells[ANVIL__ct__program_current_address] + (u64)debug__mark_data_section__section_length);
 
         break;
     // mark section of code

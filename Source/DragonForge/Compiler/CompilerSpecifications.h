@@ -578,14 +578,14 @@ COMPILER__blueprintling COMPILER__global__predefined_variables[] = {
     COMPILER__abt__define_type,
         COMPILER__pvn__error,
         COMPILER__ptt__dragon_cell,
-        ANVIL__rt__error_code,
-        ANVIL__rt__error_code,
+        ANVIL__ct__error_code,
+        ANVIL__ct__error_code,
 
     COMPILER__abt__define_type,
         COMPILER__pvn__catch_addresses,
         COMPILER__ptt__dragon_cell,
-        ANVIL__rt__address_catch_toggle,
-        ANVIL__rt__address_catch_toggle,
+        ANVIL__ct__address_catch_toggle,
+        ANVIL__ct__address_catch_toggle,
 
     COMPILER__abt__define_type,
         COMPILER__pvn__cell_byte_size,

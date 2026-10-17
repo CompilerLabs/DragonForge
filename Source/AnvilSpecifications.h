@@ -43,36 +43,36 @@ typedef enum ANVIL__st {
 
 // context cell organization defines
 // cell type
-typedef enum ANVIL__rt {
+typedef enum ANVIL__ct {
     // start of defined values
-    ANVIL__rt__START = 0,
+    ANVIL__ct__START = 0,
 
     // basic cells
-    ANVIL__rt__program_start_address = ANVIL__rt__START,
-    ANVIL__rt__program_end_address,
-    ANVIL__rt__program_current_address,
-    ANVIL__rt__error_code,
-    ANVIL__rt__flags_0,
-    ANVIL__rt__flags_1,
-    ANVIL__rt__flags_2,
-    ANVIL__rt__flags_3,
-    ANVIL__rt__address_catch_toggle,
+    ANVIL__ct__program_start_address = ANVIL__ct__START,
+    ANVIL__ct__program_end_address,
+    ANVIL__ct__program_current_address,
+    ANVIL__ct__error_code,
+    ANVIL__ct__flags_0,
+    ANVIL__ct__flags_1,
+    ANVIL__ct__flags_2,
+    ANVIL__ct__flags_3,
+    ANVIL__ct__address_catch_toggle,
 
     // end of defined cells
-    ANVIL__rt__END,
+    ANVIL__ct__END,
 
     // count
-    ANVIL__rt__RESERVED_COUNT = ANVIL__rt__END - ANVIL__rt__START,
+    ANVIL__ct__RESERVED_COUNT = ANVIL__ct__END - ANVIL__ct__START,
 
     // statistics
-    ANVIL__rt__FIRST_ID = ANVIL__rt__START,
-    ANVIL__rt__LAST_ID = 65535, // NUMBER DOES NOT CHANGE!
-    ANVIL__rt__TOTAL_COUNT = ANVIL__rt__LAST_ID + 1,
-} ANVIL__rt;
+    ANVIL__ct__FIRST_ID = ANVIL__ct__START,
+    ANVIL__ct__LAST_ID = 65535, // NUMBER DOES NOT CHANGE!
+    ANVIL__ct__TOTAL_COUNT = ANVIL__ct__LAST_ID + 1,
+} ANVIL__ct;
 
 // context
 typedef struct ANVIL__context {
-    ANVIL__cell cells[ANVIL__rt__TOTAL_COUNT];
+    ANVIL__cell cells[ANVIL__ct__TOTAL_COUNT];
 } ANVIL__context;
 
 // instruction type and instruction ID defines (type number is also ID)

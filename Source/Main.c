@@ -13,13 +13,13 @@ void MAIN__print__context(ANVIL__context* context) {
     cell_index = 0;
 
     // print program size
-    printf("Program Size: [ %lu ]\n", ((BASIC__u64)(*context).cells[ANVIL__rt__program_end_address] - (BASIC__u64)(*context).cells[ANVIL__rt__program_start_address]));
+    printf("Program Size: [ %lu ]\n", ((BASIC__u64)(*context).cells[ANVIL__ct__program_end_address] - (BASIC__u64)(*context).cells[ANVIL__ct__program_start_address]));
 
     // print cells section header
     printf("Cells:\n");
 
     // print rows
-    while (cell_index < ANVIL__rt__TOTAL_COUNT) {
+    while (cell_index < ANVIL__ct__TOTAL_COUNT) {
         // set row items
         row_items = 0;
 
@@ -27,7 +27,7 @@ void MAIN__print__context(ANVIL__context* context) {
         printf("\t%lu: [", (BASIC__u64)cell_index);
 
         // print columns
-        while (cell_index < ANVIL__rt__TOTAL_COUNT && row_items < 8) {
+        while (cell_index < ANVIL__ct__TOTAL_COUNT && row_items < 8) {
             // print cell value
             printf(" %lu", (BASIC__u64)(*context).cells[cell_index]);
 
