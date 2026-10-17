@@ -2089,7 +2089,7 @@ COMPILER__accountling_variable_argument COMPILER__account__functions__mark_varia
             }
 
             // check to see if cell range is out of bounds
-            if ((*accountling_function).next_available_workspace_cell >= ANVIL__srt__start__function_io) {
+            if ((*accountling_function).next_available_workspace_cell >= ANVIL__sct__start__function_io) {
                 // error, too many cells were used
                 *error = COMPILER__open__error("Accounting Error: A function has too many variables.", COMPILER__get__namespace_lexling_location(name.name));
 
@@ -3947,7 +3947,7 @@ COMPILER__accountling_functions COMPILER__account__functions__user_defined_funct
             COMPILER__accountling_function accountling_function;
 
             // intialize statistics
-            accountling_function.next_available_workspace_cell = ANVIL__srt__start__workspace;
+            accountling_function.next_available_workspace_cell = ANVIL__sct__start__workspace;
 
             // allocate scope headers list
             accountling_function.scope_headers = COMPILER__open__counted_list_with_error(sizeof(COMPILER__accountling_scope_header) * 16, error);
@@ -4480,7 +4480,7 @@ void COMPILER__print__accountling_functions(COMPILER__accountling_structures str
 
                     // print header
                     BASIC__print__tabs(tab_depth + 2);
-                    printf("Variables [ cells_used: %lu/%lu (%lu->%lu) ]:\n", function.next_available_workspace_cell - (BASIC__u64)ANVIL__srt__start__workspace, (BASIC__u64)ANVIL__srt__workspace__COUNT, (BASIC__u64)ANVIL__srt__start__workspace, (BASIC__u64)function.next_available_workspace_cell - 1);
+                    printf("Variables [ cells_used: %lu/%lu (%lu->%lu) ]:\n", function.next_available_workspace_cell - (BASIC__u64)ANVIL__sct__start__workspace, (BASIC__u64)ANVIL__sct__workspace__COUNT, (BASIC__u64)ANVIL__sct__start__workspace, (BASIC__u64)function.next_available_workspace_cell - 1);
 
                     // print each master & member variables
                     for (COMPILER__variable_index index = 0; index < function.variables.lists[COMPILER__avat__master].count; index++) {
